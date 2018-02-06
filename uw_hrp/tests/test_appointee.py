@@ -14,7 +14,6 @@ class AppointeeTest(TestCase):
         self.eval(get_appointee_by_regid(
                 "9136CCB8F66711D5BE060004AC494FFE"))
 
-
     def eval(self, ap):
         self.assertTrue(ap.is_active_emp_status())
         self.assertEqual(ap.netid,

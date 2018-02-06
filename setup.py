@@ -21,10 +21,10 @@ setup(
     author="UW-IT AXDD",
     author_email="aca-it@uw.edu",
     include_package_data=True,
-    install_requires=['UW-RestClients-Core>0.8,<1.0',
-                      'UW-RestClients-PWS>=0.1,<1.0',
-                      'simplejson',
-                      ],
+    install_requires=[
+        'UW-RestClients-Core>=0.9.6,<1.0',
+        'UW-RestClients-PWS>=0.6,<1.0',
+    ],
     license='Apache License, Version 2.0',
     description=('A library for connecting to the UW Human Resources API'),
     long_description=README,
@@ -35,6 +35,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.6',
     ],
 )

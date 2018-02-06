@@ -4,7 +4,7 @@ This is the interface for interacting with the HRP Web Service.
 
 from datetime import datetime
 import logging
-import simplejson as json
+import json
 from restclients_core.exceptions import InvalidRegID, InvalidNetID,\
     InvalidEmployeeID
 from uw_pws import PWS
