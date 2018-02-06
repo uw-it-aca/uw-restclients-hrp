@@ -2,18 +2,28 @@ sudo: false
 language: python
 python:
 - '2.7'
-- '3.4'
-- '3.5'
 - '3.6'
 before_script:
 - pip install -e .
-- pip install pep8
+- pip install pycodestyle
 - pip install nose2
 - pip install coverage
 - pip install commonconf
 - pip install python-coveralls
 script:
-- pep8 uw_hrp/ --exclude=uw_hrp/tests
+- pycodestyle uw_hrp/ --exclude=uw_hrp/tests
 - coverage run --source=uw_hrp uw_hrp/test.py -v
 after_script:
 - coveralls
+before_deploy:
+- find uw_hrp/ -name \*.pyc -exec rm {} \;
+- echo $TRAVIS_TAG > uw_hrp/VERSION
+deploy:
+  provider: pypi
+  user: uw-it-aca
+  skip_cleanup: true
+  password:
+    secure: FB6G0rAIAf56r4ZqPqqOiW2zMTPU8FkDrxkE63x9nnU8LNs9HJn7guAGszyZ00vXfwouM3PdOID4bqIsd0hSIo73F2Mo+DphwjxOgt0zrlXh8UQjLi4uWnrJVTi/3tw6TOa9FlElFzRM3w/LkJEFaX4h3hHAc2cCdSS6l+3cTtcP94I2xyVvscFXKkqCnkaNI7LtBE08wi1lqHs1j0nxHhfMuco6aGB73U8MiZGhOrnpmE+ymQ+EZ1E+KwpkK/U3brLp6yizXs3fLzOzy+vJj0o0QINldV04b7xaF+59mh/3JSzBXu9BOOtTdEj+/MEcK42QGaBrZ2PcJvPtuj4VN4JhoTYweQ6wE9i0e9YKPCtHEtzdZuL1m0DgOlKD5FfbzYxkMz3erGrTqImvsk0QXUMVAShMNwhsgSrsJCkDsO6AxHvbqAVDG73os8jo9dV9FePiV4uXcX//gYxVBxVgh8GrbxchXTKoNNIDM0tV+Ic2aGSNeFKUTqmWtNDkvwzUidbTO+uGKlqjdAuKUSBVmBcun/QdzAWV8QDAskZ4RSqPvtEwizefcrcewSHOEyMpvKowdeF2J2HpxJEklp/uJkW7zUZjsAmBP82sumYPk0d8CtLHou3XurMCmbNNIuFsaKRMCviUO4Gcq11oIL7ej61OZB7AFoSAdUwkO0uH8jk=
+  on:
+    tags: true
+    python: '3.6'
