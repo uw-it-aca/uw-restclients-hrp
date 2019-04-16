@@ -126,8 +126,8 @@ class Worker(models.Model):
 
     def __str__(self):
         json_data = self.json_data()
-        json_data['worker_positions'] = ','.join(
-            map(str, self.worker_positions))
+        json_data['worker_positions'] = "[{0}]".format(','.join(
+            map(str, self.worker_positions)))
         return json.dumps(json_data)
 
     def __init__(self, *args, **kwargs):
