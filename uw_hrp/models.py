@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import json
 from uw_hrp import parse_date
 from restclients_core import models
@@ -30,6 +31,10 @@ class WorkerPosition(models.Model):
                                           null=True, default=None)
     supervisory_org_desc = models.CharField(max_length=256,
                                             null=True, default=None)
+
+    def is_active_position(self):
+        now = datetime.now(timezone.utc)
+        return self.end_date is None or self.end_date > now
 
     def json_data(self):
         return {
@@ -110,7 +115,7 @@ class Worker(models.Model):
 
     def json_data(self):
         positions = []
-        for pos in self.worker_positions:
+        for pos in self.worker_active_positions:
             positions.append(pos.json_data())
 
         return {
@@ -121,13 +126,13 @@ class Worker(models.Model):
             'is_active': self.is_active,
             'is_retired': self.is_retired,
             'is_terminated': self.is_terminated,
-            'worker_positions': positions
+            'worker_active_positions': positions
             }
 
     def __str__(self):
         json_data = self.json_data()
-        json_data['worker_positions'] = "[{0}]".format(','.join(
-            map(str, self.worker_positions)))
+        json_data['worker_active_positions'] = "[{0}]".format(','.join(
+            map(str, self.worker_active_positions)))
         return json.dumps(json_data)
 
     def __init__(self, *args, **kwargs):
@@ -146,10 +151,12 @@ class Worker(models.Model):
             self.is_retired = data["WorkerEmploymentStatus"]["IsRetired"]
             self.is_terminated = data["WorkerEmploymentStatus"]["IsTerminated"]
 
-        self.worker_positions = []
-        if data.get("WorkerPositions") is not None:
+        self.worker_active_positions = []
+        if self.is_active and data.get("WorkerPositions") is not None:
             for position in data["WorkerPositions"]:
-                self.worker_positions.append(WorkerPosition(data=position))
+                position = WorkerPosition(data=position)
+                if position.is_active_position():
+                    self.worker_active_positions.append(position)
 
     class Meta:
         db_table = 'restclients_hrp_worker'

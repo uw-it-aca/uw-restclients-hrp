@@ -19,8 +19,8 @@ class WorkerTest(TestCase):
         self.assertFalse(worker.is_retired)
         self.assertFalse(worker.is_terminated)
 
-        self.assertEqual(len(worker.worker_positions), 1)
-        work_position = worker.worker_positions[0]
+        self.assertEqual(len(worker.worker_active_positions), 1)
+        work_position = worker.worker_active_positions[0]
         self.assertEqual(work_position.org_code, '3040111000')
         self.assertEqual(work_position.org_desc, "FAMILY MEDICINE")
         self.assertEqual(work_position.ecs_job_cla_code_desc,

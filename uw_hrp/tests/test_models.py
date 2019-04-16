@@ -1,4 +1,5 @@
 from unittest import TestCase
+from datetime import datetime, timedelta, timezone
 from uw_hrp import parse_date
 from uw_hrp.models import Worker, WorkerPosition
 from uw_hrp.util import fdao_hrp_override
@@ -51,6 +52,10 @@ class WorkerTest(TestCase):
              'supervisory_org_code': None,
              'supervisory_org_desc': None,
              'supervisory_org_id': None})
+        self.assertFalse(work_position.is_active_position())
+        work_position.end_date = (datetime.now(timezone.utc) +
+                                  timedelta(seconds=5))
+        self.assertTrue(work_position.is_active_position())
         self.assertIsNotNone(str(work_position))
 
     def test_worker(self):
@@ -103,7 +108,7 @@ class WorkerTest(TestCase):
              'is_active': True,
              'is_retired': False,
              'is_terminated': False,
-             'worker_positions': [
+             'worker_active_positions': [
                  {'effective_date': '1999-06-13 07:00:00+00:00',
                   'end_date': None,
                   'is_primary': True,
