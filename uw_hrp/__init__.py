@@ -4,20 +4,27 @@ the hrp web service.
 """
 
 import logging
-import json
+from dateutil.parser import parse
 from uw_hrp.dao import HRP_DAO
 from restclients_core.exceptions import DataFailureException
 
 
 logger = logging.getLogger(__name__)
+hrp_dao = HRP_DAO()
 
 
 def get_resource(url):
-    response = HRP_DAO().getURL(url, {'Accept': 'application/json'})
-    logger.info("%s ==status==> %s" % (url, response.status))
+    response = hrp_dao.getURL(url, {'Accept': 'application/json'})
 
+    logger.debug("{0} ==status==> {1}".format(url, response.status))
     if response.status != 200:
         raise DataFailureException(url, response.status, response.data)
 
-    logger.debug("%s ==data==> %s" % (url, response.data))
+    logger.debug("{0} ==data==> {1}".format(url, response.data))
     return response.data
+
+
+def parse_date(date_str):
+    if date_str is not None:
+        return parse(date_str)
+    return None

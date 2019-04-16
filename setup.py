@@ -22,8 +22,9 @@ setup(
     author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
-        'UW-RestClients-Core>=0.9.6,<1.0',
-        'UW-RestClients-PWS>=0.6,<1.0',
+        'UW-RestClients-Core<2.0',
+        'UW-RestClients-PWS<3.0',
+        'python-dateutil'
     ],
     license='Apache License, Version 2.0',
     description=('A library for connecting to the UW Human Resources API'),
@@ -34,7 +35,6 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.6',
     ],
 )
