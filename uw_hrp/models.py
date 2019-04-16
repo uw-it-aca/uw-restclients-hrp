@@ -10,8 +10,8 @@ def date_to_str(d_obj):
 
 
 class WorkerPosition(models.Model):
-    effective_date = models.DateField(null=True, default=None)
-    end_date = models.DateField(null=True, default=None)
+    effective_date = models.DateTimeField(null=True, default=None)
+    end_date = models.DateTimeField(null=True, default=None)
     ecs_job_cla_code_desc = models.CharField(max_length=64,
                                              null=True, default=None)
     location = models.CharField(max_length=96, null=True, default=None)
