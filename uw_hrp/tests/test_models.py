@@ -1,7 +1,6 @@
 from unittest import TestCase
 from datetime import datetime, timedelta, timezone
-from uw_hrp import parse_date
-from uw_hrp.models import Worker, WorkerPosition
+from uw_hrp.models import Worker, WorkerPosition, parse_date
 from uw_hrp.util import fdao_hrp_override
 
 
@@ -13,116 +12,174 @@ class WorkerTest(TestCase):
 
     def test_workerposition(self):
         data = {
-            "CostCenter":
-                {"Description": "INFORMATION SCHOOL",
-                 "ID": "061630",
-                 "OrganizationCode": "2670001000",
-                 "OrganizationDescription": "THE INFORMATION SCHOOL"},
-            "EcsJobClassificationCodeDescription": "Undergraduate Student",
+            "PositionBusinessTitle": "Program Operations Specialist (E S 8)",
+            "PositionSupervisor": {
+                "EmployeeID": "000000005",
+                "Href": "/hrp/v2/worker/000000005.json"},
+            "PositionTimeTypeID": "Full_time",
+            "PositionTitle": "Operations Specialist (E S 8)",
+            "SupervisoryOrganization": {
+                "AcademicUnitID": None,
+                "Code": "HSA: ",
+                "ID": "HSA_000204",
+                "Name": "EHS: Occl Health - Acc Prevention",
+                "Description": "HSA: ENV Health & Safety: ...",
+                "Href": "/hrp/v2/organization/HSA_000204.json",
+                "CostCenter": {
+                    "Description": "ENV HEALTH & SAFETY",
+                    "ID": "015020",
+                    "OrganizationCode": "3010105000",
+                    "OrganizationDescription": "ENV HEALTH & SAFETY"}},
+            "PositionID": "PN-0025953",
+            "PositionEffectiveDate": "1994-10-01T07:00:00.000Z",
             "IsPrimaryPosition": True,
-            "Location":
-                {"ID": "Seattle Campus",
-                 "Name": "Seattle Campus"},
-            "PositionBusinessTitle": "Reader/Grader",
-            "PositionEffectiveDate": "2017-09-16T07:00:00.000Z",
-            "PositionEndDate": "2018-06-15T00:00:00.000Z",
-            "PositionSupervisor":
-                {"EmployeeID": "000000005",
-                 "Href": "/hrp/v2/worker/000000005.json"},
-            "PositionTimeTypeID": "Part_time",
-            "PositionTitle": "Reader/Grader",
-            "PositionType": "Temporary",
-            "SupervisoryOrganization": None,
-            "WorkShift": "First Shift"
-            }
+            "PositionStartDate": "1994-10-01T00:00:00.000Z",
+            "PositionEndDate": None,
+            "PositionType": "Regular",
+            "PositionFTEPercent": "100.00000",
+            "PayRateType": "Salary",
+            "TotalBasePayAmount": "6066.00000",
+            "TotalBasePayFrequency": "Monthly",
+            "WorkShift": "First Shift",
+            "ServicePeriodID": "12",
+            "ServicePeriodDescription": "Service_Period_12.00",
+            "JobProfileSummary": {
+                "JobProfileDescription": "Operations Specialist (E S 8)",
+                "JobProfileID": "11541",
+                "Href": "/hrp/v2/jobProfile/11541.json",
+                "JobCategory": "Professional Staff & Librarians",
+                "JobFamilies": [
+                    {"JobFamilyName": "01 - Staff - Professional Staff",
+                     "JobFamilyID": "Professional",
+                     "JobFamilySummary": None}]},
+            "CostCenter": {
+                "Description": "ENV HEALTH & SAFETY",
+                "ID": "015020",
+                "OrganizationCode": "3010105000",
+                "OrganizationDescription": "ENV HEALTH & SAFETY"},
+            "EcsJobClassificationCode": "E",
+            "EcsJobClassificationCodeDescription": "Professional Staff",
+            "ObjectCode": "01",
+            "SubObjectCode": "70",
+            "PayrollUnitCode": "00702",
+            "IsOnLeaveFromPosition": False,
+            "IsFutureDate": False,
+            "IsMedicalCenterPosition": False,
+            "PlannedDistributions": {
+                "PlannedCompensationAllocations": [],
+                "PeriodActivityAssignments": []},
+            "Location": {"ID": "Seattle Campus",
+                         "Name": "Seattle Campus"},
+            "FutureTransactions": []}
+
         work_position = WorkerPosition(data=data)
         self.assertEqual(
-            work_position.json_data(),
-            {'busi_title': 'Reader/Grader',
-             'ecs_job_cla_code_desc': 'Undergraduate Student',
-             'effective_date': '2017-09-16 07:00:00+00:00',
-             'end_date': '2018-06-15 00:00:00+00:00',
-             'is_primary': True,
-             'location': 'Seattle Campus',
-             'org_code': '2670001000',
-             'org_desc': 'THE INFORMATION SCHOOL',
-             'pos_time_type_id': 'Part_time',
-             'pos_type': 'Temporary',
-             'supervisor_eid': '000000005',
-             'supervisory_org_code': None,
-             'supervisory_org_desc': None,
-             'supervisory_org_id': None})
-        self.assertFalse(work_position.is_active_position())
-        work_position.end_date = (datetime.now(timezone.utc) +
-                                  timedelta(seconds=5))
+            work_position.to_json(),
+            {
+                "start_date": "1994-10-01 00:00:00+00:00",
+                "end_date": None,
+                "ecs_job_cla_code_desc": "Professional Staff",
+                "fte_percent": 100.0,
+                "is_primary": True,
+                "location": "Seattle Campus",
+                "pos_type": "Regular",
+                "pos_time_type_id": "Full_time",
+                "title": "Program Operations Specialist (E S 8)",
+                "supervisor_eid": "000000005",
+                "job_profile": {
+                    "job_code": "11541",
+                    "description": "Operations Specialist (E S 8)"},
+                "supervisory_org": {
+                    "budget_code": "3010105000",
+                    "org_code": "HSA: ",
+                    "org_name": "EHS: Occl Health - Acc Prevention"}})
         self.assertTrue(work_position.is_active_position())
         self.assertIsNotNone(str(work_position))
 
     def test_worker(self):
         data = {
-            "NetID": "dean",
+            "NetID": "webmaster",
             "RegID": "10000000000000000000000000000115",
             "EmployeeID": "100000115",
-            "WorkerEmploymentStatus":
-                {"ActiveStatusDate": "1980-07-01T07:00:00.000Z",
-                 "EmployeeStatus": "Active",
-                 "EmployeeStatusCode": "A",
-                 "EndEmploymentDate": None,
-                 "EstimatedLastDayOfLeave": None,
-                 "FirstDayOfLeave": None,
-                 "FirstDayOfWork": "1980-07-01T07:00:00.000Z",
-                 "HireDate": "1980-07-01T07:00:00.000Z",
-                 "IsActive": True,
-                 "IsRetired": False,
-                 "IsTerminated": False,
-                 "LastDayOfWorkForLeave": None,
-                 "OriginalHireDate": "1980-07-01T07:00:00.000Z",
-                 "RetirementDate": None,
-                 "TerminationDate": None},
-            "WorkerPositions": [
-                {"CostCenter":
-                 {"Description": "SOM ADMINISTRATION",
-                  "ID": "652791",
-                  "OrganizationCode": "3040501060",
-                  "OrganizationDescription": "EXEC MGMT OEVP ADMIN"},
-                 "EcsJobClassificationCode": "F",
-                 "EcsJobClassificationCodeDescription": "Academic Personnel",
-                 "IsPrimaryPosition": True,
-                 "Location":
-                     {"ID": "Seattle Campus",
-                      "Name": "Seattle Campus"},
-                 "PositionBusinessTitle":
-                     "CEO, UW Medicine and Dean of the School of Medicine",
-                 "PositionEffectiveDate": "1999-06-13T07:00:00.000Z",
-                 "PositionEndDate": None,
-                 "PositionSupervisor":
-                     {"EmployeeID": "100001115"},
-                 "WorkShift": "First Shift"}]}
+            "WorkerEmploymentStatus": {
+                "ActiveStatusDate": "1980-07-01T07:00:00.000Z",
+                "EmployeeStatus": "Active",
+                "EmployeeStatusCode": "A",
+                "EndEmploymentDate": None,
+                "EstimatedLastDayOfLeave": None,
+                "FirstDayOfLeave": None,
+                "FirstDayOfWork": "1980-07-01T07:00:00.000Z",
+                "HireDate": "1980-07-01T07:00:00.000Z",
+                "IsActive": True,
+                "IsRetired": False,
+                "IsTerminated": False,
+                "LastDayOfWorkForLeave": None,
+                "OriginalHireDate": "1980-07-01T07:00:00.000Z",
+                "RetirementDate": None,
+                "TerminationDate": None},
+            "WorkerPositions": [{
+                "PositionBusinessTitle": "Web Support Specialist",
+                "PositionSupervisor": {
+                    "EmployeeID": "000000005",
+                    "Href": "/hrp/v2/worker/000000005.json"},
+                "PositionTimeTypeID": "Full_time",
+                "PositionTitle": "COM SUP ANA 2, Web and Social Media",
+                "SupervisoryOrganization": {
+                    "AcademicUnitID": None,
+                    "Code": "UWB: ",
+                    "ID": "UWB_000066",
+                    "Name": "Web and Social Media",
+                    "Description": "UWB: Web and Social Media ()",
+                    "Href": "/hrp/v2/organization/UWB_000066.json",
+                    "CostCenter": {
+                        "Description": "ADV & EXT RELATIONS -B",
+                        "ID": "060304",
+                        "OrganizationCode": "5014010000",
+                        "OrganizationDescription": "BR-B OFFICE OF ADV"}},
+                "PositionID": "PN-0036224",
+                "PositionEffectiveDate": "2015-12-21T08:00:00.000Z",
+                "IsPrimaryPosition": True,
+                "PositionStartDate": "2015-12-21T00:00:00.000Z",
+                "PositionEndDate": None,
+                "PositionType": "Regular",
+                "PositionFTEPercent": "100.00000",
+                "PayRateType": "Salary",
+                "TotalBasePayFrequency": "Monthly",
+                "WorkShift": "First Shift",
+                "ServicePeriodID": "12",
+                "ServicePeriodDescription": "Service_Period_12.00",
+                "JobProfileSummary": {},
+                "CostCenter": {
+                    "Description": "ADV & EXT RELATIONS -B",
+                    "ID": "060304",
+                    "OrganizationCode": "5014010000",
+                    "OrganizationDescription": "BR-B OFFICE OF ADV"},
+                "EcsJobClassificationCode": "B",
+                "EcsJobClassificationCodeDescription": "Classified Staff",
+                "ObjectCode": "01",
+                "SubObjectCode": "60",
+                "PayrollUnitCode": "00356",
+                "IsOnLeaveFromPosition": False,
+                "IsFutureDate": False,
+                "IsMedicalCenterPosition": False,
+                "Location": {"ID": "Bothell Campus",
+                             "Name": "Bothell Campus"},
+                "FutureTransactions": []}],
+            "AcademicAppointments": [],
+            "SystemMetadata": {"LastModified": None}}
         worker = Worker(data=data)
+        self.assertEqual(worker.netid, 'webmaster')
+        self.assertEqual(worker.employee_id, '100000115')
+        self.assertEqual(worker.primary_manager_id, '000000005')
         self.assertEqual(
-            worker.json_data(),
-            {'netid': 'dean',
-             'regid': "10000000000000000000000000000115",
-             'employee_id': '100000115',
-             'employee_status': 'Active',
-             'is_active': True,
-             'is_retired': False,
-             'is_terminated': False,
-             'worker_active_positions': [
-                 {'effective_date': '1999-06-13 07:00:00+00:00',
-                  'end_date': None,
-                  'is_primary': True,
-                  'busi_title':
-                      'CEO, UW Medicine and Dean of the School of Medicine',
-                  'pos_type': None,
-                  'ecs_job_cla_code_desc': 'Academic Personnel',
-                  'location': 'Seattle Campus',
-                  'org_code': '3040501060',
-                  'org_desc': 'EXEC MGMT OEVP ADMIN',
-                  'pos_time_type_id': None,
-                  'supervisor_eid': '100001115',
-                  'supervisory_org_code': None,
-                  'supervisory_org_id': None,
-                  'supervisory_org_desc': None}
-                 ]})
+            worker.employee_status.to_json(),
+            {"end_emp_date": None,
+             "hire_date": "1980-07-01 07:00:00+00:00",
+             "is_active": True,
+             "is_retired": False,
+             "is_terminated": False,
+             "retirement_date": None,
+             "status": "Active",
+             "status_code": "A",
+             "termination_date": None})
         self.assertIsNotNone(str(worker))

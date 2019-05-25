@@ -4,7 +4,6 @@ the hrp web service.
 """
 
 import logging
-from dateutil.parser import parse
 from uw_hrp.dao import HRP_DAO
 from restclients_core.exceptions import DataFailureException
 
@@ -22,9 +21,3 @@ def get_resource(url):
 
     logger.debug("{0} ==data==> {1}".format(url, response.data))
     return response.data
-
-
-def parse_date(date_str):
-    if date_str is not None:
-        return parse(date_str)
-    return None
