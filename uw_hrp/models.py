@@ -41,7 +41,7 @@ class EmploymentStatus(models.Model):
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
         if data is None:
-            return super(WorkerPosition, self).__init__(*args, **kwargs)
+            return super(EmploymentStatus, self).__init__(*args, **kwargs)
 
         self.status = data.get("EmployeeStatus")
         self.status_code = data.get("EmployeeStatusCode")
@@ -72,7 +72,7 @@ class JobProfile(models.Model):
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
         if data is None:
-            return super(WorkerPosition, self).__init__(*args, **kwargs)
+            return super(JobProfile, self).__init__(*args, **kwargs)
 
         self.job_code = data.get("JobProfileID")
         self.description = data.get("JobProfileDescription")
@@ -94,12 +94,13 @@ class SupervisoryOrganization(models.Model):
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
         if data is None:
-            return super(WorkerPosition, self).__init__(*args, **kwargs)
+            return super(SupervisoryOrganization, self).__init__(*args,
+                                                                 **kwargs)
 
         if data.get("CostCenter") is not None:
             self.budget_code = data["CostCenter"].get("OrganizationCode")
-        self.org_code = data.get("Code")
-        self.org_name = data.get("Name")
+        self.org_code = data.get("Code").strip()
+        self.org_name = data.get("Name").strip()
 
     def __str__(self):
         return json.dumps(self.to_json())
@@ -125,28 +126,39 @@ class WorkerPosition(models.Model):
         return self.end_date is None or self.end_date > now
 
     def to_json(self):
-        return {
-            'start_date': date_to_str(self.start_date),
-            'end_date': date_to_str(self.end_date),
-            'ecs_job_cla_code_desc': self.ecs_job_cla_code_desc,
-            'fte_percent': self.fte_percent,
-            'is_primary': self.is_primary,
-            'location': self.location,
-            'pos_type': self.pos_type,
-            'pos_time_type_id': self.pos_time_type_id,
-            'title': self.title,
-            'supervisor_eid': self.supervisor_eid,
-            'job_profile': self.job_profile.to_json(),
-            'supervisory_org': self.supervisory_org.to_json(),
-            }
+        data = {'start_date': date_to_str(self.start_date),
+                'end_date': date_to_str(self.end_date),
+                'ecs_job_cla_code_desc': self.ecs_job_cla_code_desc,
+                'fte_percent': self.fte_percent,
+                'is_primary': self.is_primary,
+                'location': self.location,
+                'pos_type': self.pos_type,
+                'pos_time_type_id': self.pos_time_type_id,
+                'title': self.title,
+                'supervisor_eid': self.supervisor_eid,
+                'job_profile': None,
+                'supervisory_org': None}
+        if self.job_profile is not None:
+            data['job_profile'] = self.job_profile.to_json()
+        if self.supervisory_org is not None:
+            data['supervisory_org'] = self.supervisory_org.to_json()
+        return data
 
     def __str__(self):
         return json.dumps(self.to_json())
 
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
+        self.job_profile = None
+        self.supervisory_org = None
         if data is None:
             return super(WorkerPosition, self).__init__(*args, **kwargs)
+
+        self.job_profile = JobProfile(
+            data=data.get("JobProfileSummary"))
+
+        self.supervisory_org = SupervisoryOrganization(
+            data=data.get("SupervisoryOrganization"))
 
         self.ecs_job_cla_code_desc = \
             data.get("EcsJobClassificationCodeDescription")
@@ -166,59 +178,57 @@ class WorkerPosition(models.Model):
         if data.get("PositionSupervisor") is not None:
             self.supervisor_eid = data["PositionSupervisor"]["EmployeeID"]
 
-        if data.get("SupervisoryOrganization") is not None:
-            self.supervisory_org = SupervisoryOrganization(
-                data=data["SupervisoryOrganization"])
-        else:
-            self.supervisory_org = SupervisoryOrganization()
-
-        if data.get("JobProfileSummary") is not None:
-            self.job_profile = JobProfile(data=data["JobProfileSummary"])
-        else:
-            self.job_profile = JobProfile()
-
 
 class Worker(models.Model):
     netid = models.CharField(max_length=32)
     regid = models.CharField(max_length=32)
     employee_id = models.CharField(max_length=16)
-    primary_manager_id = models.CharField(max_length=16)
+    primary_manager_id = models.CharField(max_length=16,
+                                          null=True, default=None)
 
     def to_json(self):
-        positions = []
-        for pos in self.worker_active_positions:
-            positions.append(pos.to_json())
+        data = {"netid": self.netid,
+                'regid': self.regid,
+                'employee_id': self.employee_id,
+                'employee_status': None,
+                'primary_manager_id': self.primary_manager_id}
 
-        return {
-            "netid": self.netid,
-            'regid': self.regid,
-            'employee_id': self.employee_id,
-            'employee_status': self.employee_status.to_json(),
-            'primary_manager_id': self.primary_manager_id,
-            'worker_active_positions': positions
-            }
+        if self.employee_status is not None:
+            data['employee_status'] = self.employee_status.to_json()
+
+        positions = []
+        if self.primary_position is not None:
+            positions.append(self.primary_position.to_json())
+        for pos in self.other_active_positions:
+            positions.append(pos.to_json())
+        data['active_positions'] = positions
+        return data
 
     def __str__(self):
         return json.dumps(self.to_json())
 
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
+        self.employee_status = None
+        self.primary_position = None
+        self.other_active_positions = []
+
         if data is None:
-            return super(WorkerPosition, self).__init__(*args, **kwargs)
+            return super(Worker, self).__init__(*args, **kwargs)
 
         self.netid = data.get("NetID")
         self.regid = data.get("RegID")
         self.employee_id = data.get("EmployeeID")
-
         self.employee_status = EmploymentStatus(
             data=data.get("WorkerEmploymentStatus"))
 
-        self.worker_active_positions = []
         if (self.employee_status.is_active and
                 data.get("WorkerPositions") is not None):
             for position in data["WorkerPositions"]:
                 position = WorkerPosition(data=position)
                 if position.is_active_position():
-                    self.worker_active_positions.append(position)
                     if position.is_primary:
                         self.primary_manager_id = position.supervisor_eid
+                        self.primary_position = position
+                    else:
+                        self.other_active_positions.append(position)

@@ -1,8 +1,8 @@
 from unittest import TestCase
-from uw_hrp.worker import (
-    get_worker_by_netid, get_worker_by_employee_id, get_worker_by_regid)
 from restclients_core.exceptions import (
     DataFailureException, InvalidEmployeeID, InvalidRegID, InvalidNetID)
+from uw_hrp.worker import (
+    get_worker_by_netid, get_worker_by_employee_id, get_worker_by_regid)
 from uw_hrp.util import fdao_hrp_override
 
 
@@ -10,6 +10,12 @@ from uw_hrp.util import fdao_hrp_override
 class WorkerTest(TestCase):
 
     def test_get_worker_by_netid(self):
+        self.assertRaises(DataFailureException,
+                          get_worker_by_netid,
+                          "None")
+        self.assertRaises(InvalidNetID,
+                          get_worker_by_netid,
+                          "")
         worker = get_worker_by_netid("faculty")
         self.assertEqual(
             worker.to_json(),
@@ -27,7 +33,7 @@ class WorkerTest(TestCase):
                  "status_code": "A",
                  "termination_date": None},
              "primary_manager_id": "100000015",
-             "worker_active_positions": [{
+             "active_positions": [{
                  "start_date": "2012-07-01 00:00:00+00:00",
                  "end_date": None,
                  "ecs_job_cla_code_desc": "Academic Personnel",
@@ -46,77 +52,41 @@ class WorkerTest(TestCase):
                      "org_code": "SOM",
                      "org_name": "Family Medicine: Volunteer"}}]})
         self.assertIsNotNone(str(worker))
-
-        self.assertEqual(worker.netid, "faculty")
-        self.assertEqual(worker.regid,
-                         "10000000000000000000000000000005")
-        self.assertEqual(worker.employee_id, "000000005")
-        self.assertTrue(worker.employee_status.is_active)
-        self.assertFalse(worker.employee_status.is_retired)
-        self.assertFalse(worker.employee_status.is_terminated)
-        self.assertEqual(str(worker.employee_status.hire_date),
-                         "2006-05-16 07:00:00+00:00")
-        self.assertIsNotNone(str(worker.employee_status.to_json()))
-
-        self.assertEqual(len(worker.worker_active_positions), 1)
-        work_position = worker.worker_active_positions[0]
-        self.assertIsNotNone(str(work_position))
-
-        sup_org = work_position.supervisory_org
-        self.assertEqual(sup_org.org_code, 'SOM')
-        self.assertEqual(sup_org.org_name,
-                         "Family Medicine: Volunteer")
-        self.assertEqual(sup_org.budget_code,
-                         '3040111000')
-        self.assertIsNotNone(str(sup_org))
-
-        self.assertEqual(work_position.ecs_job_cla_code_desc,
-                         "Academic Personnel")
-        self.assertEqual(str(work_position.start_date),
-                         "2012-07-01 00:00:00+00:00")
-        self.assertIsNone(work_position.end_date)
-        self.assertEqual(work_position.title,
-                         "Clinical Associate Professor")
-        self.assertEqual(work_position.pos_type,
-                         "Unpaid_Academic")
-        self.assertEqual(work_position.supervisor_eid,
-                         "100000015")
-        self.assertEqual(work_position.pos_time_type_id,
-                         "Part_time")
-        self.assertEqual(work_position.location,
-                         "Seattle Campus")
-        self.assertTrue(work_position.is_primary)
-
-        self.assertEqual(work_position.job_profile.job_code,
-                         '21184')
-        self.assertEqual(work_position.job_profile.description,
-                         'Unpaid Academic')
-        self.assertEqual(work_position.job_profile.to_json(),
-                         {'job_code': '21184',
-                          'description': 'Unpaid Academic'})
-        self.assertIsNotNone(str(work_position.job_profile))
+        self.assertEqual(
+            worker.primary_position.to_json(),
+            {"start_date": "2012-07-01 00:00:00+00:00",
+             "end_date": None,
+             "ecs_job_cla_code_desc": "Academic Personnel",
+             'fte_percent': 0.0,
+             "is_primary": True,
+             "location": "Seattle Campus",
+             "pos_type": "Unpaid_Academic",
+             "pos_time_type_id": "Part_time",
+             "title": "Clinical Associate Professor",
+             "supervisor_eid": "100000015",
+             "job_profile": {
+                 "job_code": "21184",
+                 "description": "Unpaid Academic"},
+             "supervisory_org": {
+                 "budget_code": "3040111000",
+                 "org_code": "SOM",
+                 "org_name": "Family Medicine: Volunteer"}})
+        self.assertEqual(len(worker.other_active_positions), 0)
 
     def test_get_worker_by_employee_id(self):
         worker = get_worker_by_employee_id("100000015")
         self.assertTrue(worker.netid,
                         'chair')
+        self.assertRaises(InvalidEmployeeID,
+                          get_worker_by_employee_id,
+                          "")
 
     def test_get_worker_by_regid(self):
         worker = get_worker_by_regid("10000000000000000000000000000015")
         self.assertTrue(worker.netid,
                         'chair')
-
-    def test_invalid_user(self):
         self.assertRaises(DataFailureException,
                           get_worker_by_regid,
                           "00000000000000000000000000000001")
-
-        self.assertRaises(DataFailureException,
-                          get_worker_by_employee_id,
-                          "100000000")
-
         self.assertRaises(InvalidRegID,
                           get_worker_by_regid, "000")
-        self.assertRaises(InvalidNetID, get_worker_by_netid, "#&$^&$")
-        self.assertRaises(InvalidEmployeeID, get_worker_by_employee_id,
-                          "0")

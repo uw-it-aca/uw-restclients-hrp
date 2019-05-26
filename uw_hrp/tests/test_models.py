@@ -1,6 +1,8 @@
 from unittest import TestCase
 from datetime import datetime, timedelta, timezone
-from uw_hrp.models import Worker, WorkerPosition, parse_date
+from uw_hrp.models import (
+    EmploymentStatus, JobProfile, SupervisoryOrganization,
+    Worker, WorkerPosition, parse_date)
 from uw_hrp.util import fdao_hrp_override
 
 
@@ -10,7 +12,38 @@ class WorkerTest(TestCase):
     def test_parse_date(self):
         self.assertIsNotNone(parse_date("2017-09-16T07:00:00.000Z"))
 
-    def test_workerposition(self):
+    def test_employment_status(self):
+        emp_status = EmploymentStatus(status="Active",
+                                      status_code='A')
+        self.assertIsNotNone(str(emp_status))
+
+        emp_status = EmploymentStatus(
+            data={
+                "ActiveStatusDate": "1980-07-01T07:00:00.000Z",
+                "EmployeeStatus": "Active",
+                "EmployeeStatusCode": "A",
+                "EndEmploymentDate": "2017-09-16T07:00:00.000Z",
+                "HireDate": "1980-07-01T07:00:00.000Z",
+                "IsActive": True,
+                "OriginalHireDate": "1980-07-01T07:00:00.000Z",
+                "RetirementDate": "2017-09-16T07:00:00.000Z",
+                "TerminationDate": "2017-09-16T07:00:00.000Z"})
+        self.assertIsNotNone(str(emp_status))
+
+    def test_job_profile(self):
+        job_prof = JobProfile(job_code="1", description="A")
+        self.assertIsNotNone(str(job_prof))
+
+    def test_supervisory_organization(self):
+        super_org = SupervisoryOrganization(
+            budget_code="3010105000",
+            org_code="HSA:",
+            org_name="EHS: Occl Health - Acc Prevention")
+        self.assertIsNotNone(str(super_org))
+
+    def test_worker_position(self):
+        pos = WorkerPosition()
+        self.assertIsNotNone(str(pos))
         data = {
             "PositionBusinessTitle": "Program Operations Specialist (E S 8)",
             "PositionSupervisor": {
@@ -34,7 +67,7 @@ class WorkerTest(TestCase):
             "PositionEffectiveDate": "1994-10-01T07:00:00.000Z",
             "IsPrimaryPosition": True,
             "PositionStartDate": "1994-10-01T00:00:00.000Z",
-            "PositionEndDate": None,
+            "PositionEndDate": "1997-10-01T00:00:00.000Z",
             "PositionType": "Regular",
             "PositionFTEPercent": "100.00000",
             "PayRateType": "Salary",
@@ -77,7 +110,7 @@ class WorkerTest(TestCase):
             work_position.to_json(),
             {
                 "start_date": "1994-10-01 00:00:00+00:00",
-                "end_date": None,
+                "end_date": "1997-10-01 00:00:00+00:00",
                 "ecs_job_cla_code_desc": "Professional Staff",
                 "fte_percent": 100.0,
                 "is_primary": True,
@@ -91,12 +124,16 @@ class WorkerTest(TestCase):
                     "description": "Operations Specialist (E S 8)"},
                 "supervisory_org": {
                     "budget_code": "3010105000",
-                    "org_code": "HSA: ",
+                    "org_code": "HSA:",
                     "org_name": "EHS: Occl Health - Acc Prevention"}})
-        self.assertTrue(work_position.is_active_position())
+        self.assertFalse(work_position.is_active_position())
         self.assertIsNotNone(str(work_position))
 
     def test_worker(self):
+        worker = Worker(netid='none',
+                        regid="10000000",
+                        employee_id="100000115")
+        self.assertIsNotNone(str(worker))
         data = {
             "NetID": "webmaster",
             "RegID": "10000000000000000000000000000115",
@@ -164,13 +201,77 @@ class WorkerTest(TestCase):
                 "IsMedicalCenterPosition": False,
                 "Location": {"ID": "Bothell Campus",
                              "Name": "Bothell Campus"},
-                "FutureTransactions": []}],
+                "FutureTransactions": []},
+                {"CostCenter": {
+                    "Description": "INFORMATION SCHOOL",
+                    "ID": "061630",
+                    "OrganizationCode": "2670001000",
+                    "OrganizationDescription": "THE INFORMATION SCHOOL"},
+                 "EcsJobClassificationCode": "U",
+                 "EcsJobClassificationCodeDescription": "Undergrad Student",
+                 "FutureTransactions": [],
+                 "IsFutureDate": False,
+                 "IsMedicalCenterPosition": False,
+                 "IsOnLeaveFromPosition": False,
+                 "IsPrimaryPosition": True,
+                 "JobProfileSummary": {
+                     "Href": "/hrp/v2/jobProfile/10886.json",
+                     "JobCategory": "Hourly and Other",
+                     "JobFamilies": [],
+                     "JobProfileDescription": "Reader/Grader (NE H UAW ASE)",
+                     "JobProfileID": "10886"},
+                 "Location": {"ID": "Seattle Campus",
+                              "Name": "Seattle Campus"},
+                 "ObjectCode": "01",
+                 "PayRateType": "Hourly",
+                 "PayrollUnitCode": "00652",
+                 "PlannedDistributions": {
+                     "PeriodActivityAssignments": [],
+                     "PlannedCompensationAllocations": [],
+                 },
+                 "PositionBusinessTitle": "Reader/Grader",
+                 "PositionEffectiveDate": "2017-09-16T07:00:00.000Z",
+                 "PositionEndDate": "2018-06-15T00:00:00.000Z",
+                 "PositionFTEPercent": "0.00000",
+                 "PositionID": "PN-0086428",
+                 "PositionStartDate": "2017-09-16T00:00:00.000Z",
+                 "PositionSupervisor": {
+                     "EmployeeID": "000004000",
+                     "Href": "/hrp/v2/worker/000004000.json"},
+                 "PositionTimeTypeID": "Part_time",
+                 "PositionTitle": "Reader/Grader",
+                 "PositionType": "Temporary",
+                 "ServicePeriodDescription": "Service_Period_12.00",
+                 "ServicePeriodID": "12",
+                 "SubObjectCode": "80",
+                 "SupervisoryOrganization": None,
+                 "WorkShift": "First Shift"}],
             "AcademicAppointments": [],
             "SystemMetadata": {"LastModified": None}}
         worker = Worker(data=data)
         self.assertEqual(worker.netid, 'webmaster')
         self.assertEqual(worker.employee_id, '100000115')
         self.assertEqual(worker.primary_manager_id, '000000005')
+        self.assertEqual(
+            worker.primary_position.to_json(),
+            {'ecs_job_cla_code_desc': 'Classified Staff',
+             'end_date': None,
+             'fte_percent': 100.0,
+             'is_primary': True,
+             'job_profile': {'description': None, 'job_code': None},
+             'location': 'Bothell Campus',
+             'pos_time_type_id': 'Full_time',
+             'pos_type': 'Regular',
+             'start_date': '2015-12-21 00:00:00+00:00',
+             'supervisor_eid': '000000005',
+             'supervisory_org': {
+                 'budget_code': '5014010000',
+                 'org_code': 'UWB:',
+                 'org_name': 'Web and Social Media'},
+             'title': 'Web Support Specialist'})
+        self.assertIsNotNone(str(worker.primary_position))
+        self.assertEqual(len(worker.other_active_positions), 0)
+        self.assertIsNotNone(str(worker.employee_status))
         self.assertEqual(
             worker.employee_status.to_json(),
             {"end_emp_date": None,
@@ -182,4 +283,3 @@ class WorkerTest(TestCase):
              "status": "Active",
              "status_code": "A",
              "termination_date": None})
-        self.assertIsNotNone(str(worker))
