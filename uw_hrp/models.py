@@ -128,7 +128,7 @@ class WorkerPosition(models.Model):
     title = models.CharField(max_length=128, null=True, default=None)
 
     def is_active_position(self):
-        now = get_now()
+        now = get_now() + timedelta(days=1)
         return self.end_date is None or self.end_date > now
 
     def to_json(self):
