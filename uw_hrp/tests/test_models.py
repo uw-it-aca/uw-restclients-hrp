@@ -1,5 +1,4 @@
 from unittest import TestCase
-from datetime import datetime, timedelta, timezone
 from uw_hrp.models import (
     EmploymentStatus, JobProfile, SupervisoryOrganization,
     Worker, WorkerPosition, parse_date)
@@ -128,6 +127,12 @@ class WorkerTest(TestCase):
                     "org_name": "EHS: Occl Health - Acc Prevention"}})
         self.assertFalse(work_position.is_active_position())
         self.assertIsNotNone(str(work_position))
+
+        work_position = WorkerPosition(
+            data={"PositionStartDate": "1994-10-01T00:00:00.000Z",
+                  "PositionEndDate": "future",
+                  "PositionFTEPercent": "100.00000"})
+        self.assertTrue(work_position.is_active_position())
 
     def test_worker(self):
         worker = Worker(netid='none',

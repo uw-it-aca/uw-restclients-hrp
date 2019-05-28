@@ -1,7 +1,13 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from dateutil.parser import parse
 import json
 from restclients_core import models
+from uw_hrp.dao import HRP_DAO
+
+
+def get_now():
+    # return time-zone-aware datetime
+    return datetime.now(timezone.utc)
 
 
 def date_to_str(d_obj):
@@ -122,7 +128,7 @@ class WorkerPosition(models.Model):
     title = models.CharField(max_length=128, null=True, default=None)
 
     def is_active_position(self):
-        now = datetime.now(timezone.utc)
+        now = get_now()
         return self.end_date is None or self.end_date > now
 
     def to_json(self):
@@ -173,7 +179,11 @@ class WorkerPosition(models.Model):
             self.start_date = parse_date(data["PositionStartDate"])
 
         if data.get("PositionEndDate") is not None:
-            self.end_date = parse_date(data["PositionEndDate"])
+            if (HRP_DAO().is_using_file_dao() and
+                    data["PositionEndDate"] == "future"):
+                self.end_date = get_now() + timedelta(days=30)
+            else:
+                self.end_date = parse_date(data["PositionEndDate"])
 
         if data.get("PositionSupervisor") is not None:
             self.supervisor_eid = data["PositionSupervisor"]["EmployeeID"]
