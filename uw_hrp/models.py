@@ -1,8 +1,7 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from dateutil.parser import parse
 import json
 from restclients_core import models
-from uw_hrp.dao import HRP_DAO
 
 
 def get_now():
@@ -128,8 +127,10 @@ class WorkerPosition(models.Model):
     title = models.CharField(max_length=128, null=True, default=None)
 
     def is_active_position(self):
-        now = get_now() + timedelta(days=1)
-        return self.end_date is None or self.end_date > now
+        return self.end_date is None or self.end_date > get_now()
+
+    def is_future_position(self):
+        return self.start_date is not None and self.start_date > get_now()
 
     def to_json(self):
         data = {'start_date': date_to_str(self.start_date),
@@ -177,14 +178,8 @@ class WorkerPosition(models.Model):
         self.fte_percent = float(data.get("PositionFTEPercent"))
         if data.get("PositionStartDate") is not None:
             self.start_date = parse_date(data["PositionStartDate"])
-
         if data.get("PositionEndDate") is not None:
-            if (HRP_DAO().is_using_file_dao() and
-                    data["PositionEndDate"] == "future"):
-                self.end_date = get_now() + timedelta(days=30)
-            else:
-                self.end_date = parse_date(data["PositionEndDate"])
-
+            self.end_date = parse_date(data["PositionEndDate"])
         if data.get("PositionSupervisor") is not None:
             self.supervisor_eid = data["PositionSupervisor"]["EmployeeID"]
 
@@ -220,8 +215,8 @@ class Worker(models.Model):
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
         self.employee_status = None
-        self.primary_position = None
-        self.other_active_positions = []
+        self.primary_position = None  # only 1 primary position
+        self.other_active_positions = []  # include the future position
 
         if data is None:
             return super(Worker, self).__init__(*args, **kwargs)

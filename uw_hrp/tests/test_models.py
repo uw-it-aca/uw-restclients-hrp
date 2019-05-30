@@ -1,4 +1,5 @@
 from unittest import TestCase
+from datetime import datetime, timedelta, timezone
 from uw_hrp.models import (
     EmploymentStatus, JobProfile, SupervisoryOrganization,
     Worker, WorkerPosition, parse_date)
@@ -130,9 +131,19 @@ class WorkerTest(TestCase):
 
         work_position = WorkerPosition(
             data={"PositionStartDate": "1994-10-01T00:00:00.000Z",
-                  "PositionEndDate": "future",
+                  "PositionEndDate": str(datetime.now(timezone.utc) +
+                                         timedelta(minutes=1)),
                   "PositionFTEPercent": "100.00000"})
         self.assertTrue(work_position.is_active_position())
+        self.assertFalse(work_position.is_future_position())
+
+        work_position = WorkerPosition(
+            data={"PositionStartDate": str(datetime.now(timezone.utc) +
+                                           timedelta(minutes=1)),
+                  "PositionEndDate": None,
+                  "PositionFTEPercent": "100.00000"})
+        self.assertTrue(work_position.is_active_position())
+        self.assertTrue(work_position.is_future_position())
 
     def test_worker(self):
         worker = Worker(netid='none',
