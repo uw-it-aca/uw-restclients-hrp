@@ -312,3 +312,25 @@ class WorkerTest(TestCase):
         self.assertEqual(len(worker.other_active_positions), 1)
         self.assertIsNotNone(str(worker.employee_status))
         self.assertIsNotNone(str(worker))
+
+        data = {
+            "NetID": "webmaster",
+            "RegID": "10000000000000000000000000000115",
+            "EmployeeID": "100000115",
+            "WorkerEmploymentStatus": {
+                "IsActive": False,
+                "EmployeeStatus": "Terminated",
+                "EmployeeStatusCode": "N",
+                "IsTerminated": True,
+                "EndEmploymentDate": None,
+                "HireDate": "1980-07-01T07:00:00.000Z",
+                "IsRetired": False,
+                "RetirementDate": None,
+                "TerminationDate": None},
+            "WorkerPositions": []}
+        worker = Worker(data=data)
+        self.assertIsNone(worker.primary_position)
+        self.assertEqual(len(worker.other_active_positions), 0)
+        self.assertTrue(worker.employee_status.is_terminated)
+        self.assertFalse(worker.employee_status.is_active)
+        self.assertIsNotNone(str(worker))
