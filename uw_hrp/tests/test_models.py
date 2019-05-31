@@ -160,6 +160,13 @@ class WorkerTest(TestCase):
         self.assertTrue(work_position.is_future_date)
         self.assertTrue(work_position.is_active_position())
 
+        work_position = WorkerPosition(
+            data={"PositionStartDate": None,
+                  "IsFutureDate": False,
+                  "PositionEndDate": None,
+                  "PositionFTEPercent": "0.00000"})
+        self.assertIsNotNone(work_position)
+
     def test_worker(self):
         worker = Worker(netid='none',
                         regid="10000000",
@@ -244,7 +251,7 @@ class WorkerTest(TestCase):
                  "IsFutureDate": False,
                  "IsMedicalCenterPosition": False,
                  "IsOnLeaveFromPosition": False,
-                 "IsPrimaryPosition": True,
+                 "IsPrimaryPosition": False,
                  "JobProfileSummary": {
                      "Href": "/hrp/v2/jobProfile/10886.json",
                      "JobCategory": "Hourly and Other",
@@ -262,8 +269,8 @@ class WorkerTest(TestCase):
                  },
                  "PositionBusinessTitle": "Reader/Grader",
                  "PositionEffectiveDate": "2017-09-16T07:00:00.000Z",
-                 "PositionEndDate": "2018-06-15T00:00:00.000Z",
-                 "PositionFTEPercent": "0.00000",
+                 "PositionEndDate": None,
+                 "PositionFTEPercent": "10.00000",
                  "PositionID": "PN-0086428",
                  "PositionStartDate": "2017-09-16T00:00:00.000Z",
                  "PositionSupervisor": {
@@ -302,5 +309,6 @@ class WorkerTest(TestCase):
                  'org_name': 'Web and Social Media'},
              'title': 'Web Support Specialist'})
         self.assertIsNotNone(str(worker.primary_position))
-        self.assertEqual(len(worker.other_active_positions), 0)
+        self.assertEqual(len(worker.other_active_positions), 1)
         self.assertIsNotNone(str(worker.employee_status))
+        self.assertIsNotNone(str(worker))
