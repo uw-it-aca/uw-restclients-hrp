@@ -50,17 +50,13 @@ class EmploymentStatus(models.Model):
 
         self.status = data.get("EmployeeStatus")
         self.status_code = data.get("EmployeeStatusCode")
-        if data.get("EndEmploymentDate") is not None:
-            self.end_emp_date = parse_date(data["EndEmploymentDate"])
+        self.end_emp_date = parse_date(data.get("EndEmploymentDate"))
         self.is_active = data.get("IsActive")
         self.is_retired = data.get("IsRetired")
         self.is_terminated = data.get("IsTerminated")
-        if data.get("HireDate") is not None:
-            self.hire_date = parse_date(data["HireDate"])
-        if data.get("RetirementDate") is not None:
-            self.retirement_date = parse_date(data["RetirementDate"])
-        if data.get("TerminationDate") is not None:
-            self.termination_date = parse_date(data["TerminationDate"])
+        self.hire_date = parse_date(data.get("HireDate"))
+        self.retirement_date = parse_date(data.get("RetirementDate"))
+        self.termination_date = parse_date(data.get("TerminationDate"))
 
     def __str__(self):
         return json.dumps(self.to_json())
@@ -116,6 +112,7 @@ class WorkerPosition(models.Model):
     end_date = models.DateTimeField(null=True, default=None)
     ecs_job_cla_code_desc = models.CharField(max_length=96,
                                              null=True, default=None)
+    is_future_date = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
     location = models.CharField(max_length=96, null=True, default=None)
     pos_type = models.CharField(max_length=64, null=True, default=None)
@@ -129,14 +126,12 @@ class WorkerPosition(models.Model):
     def is_active_position(self):
         return self.end_date is None or self.end_date > get_now()
 
-    def is_future_position(self):
-        return self.start_date is not None and self.start_date > get_now()
-
     def to_json(self):
         data = {'start_date': date_to_str(self.start_date),
                 'end_date': date_to_str(self.end_date),
                 'ecs_job_cla_code_desc': self.ecs_job_cla_code_desc,
                 'fte_percent': self.fte_percent,
+                'is_future_date': self.is_future_date,
                 'is_primary': self.is_primary,
                 'location': self.location,
                 'pos_type': self.pos_type,
@@ -169,6 +164,7 @@ class WorkerPosition(models.Model):
 
         self.ecs_job_cla_code_desc = \
             data.get("EcsJobClassificationCodeDescription")
+        self.is_future_date = data.get("IsFutureDate")
         self.is_primary = data.get("IsPrimaryPosition")
         if data.get("Location") is not None:
             self.location = data["Location"]["ID"]
@@ -176,10 +172,8 @@ class WorkerPosition(models.Model):
         self.pos_type = data.get("PositionType")
         self.pos_time_type_id = data.get("PositionTimeTypeID")
         self.fte_percent = float(data.get("PositionFTEPercent"))
-        if data.get("PositionStartDate") is not None:
-            self.start_date = parse_date(data["PositionStartDate"])
-        if data.get("PositionEndDate") is not None:
-            self.end_date = parse_date(data["PositionEndDate"])
+        self.start_date = parse_date(data.get("PositionStartDate"))
+        self.end_date = parse_date(data.get("PositionEndDate"))
         if data.get("PositionSupervisor") is not None:
             self.supervisor_eid = data["PositionSupervisor"]["EmployeeID"]
 
@@ -227,13 +221,14 @@ class Worker(models.Model):
         self.employee_status = EmploymentStatus(
             data=data.get("WorkerEmploymentStatus"))
 
-        if (self.employee_status.is_active and
-                data.get("WorkerPositions") is not None):
-            for position in data["WorkerPositions"]:
-                position = WorkerPosition(data=position)
-                if position.is_active_position():
-                    if position.is_primary:
-                        self.primary_manager_id = position.supervisor_eid
-                        self.primary_position = position
-                    else:
-                        self.other_active_positions.append(position)
+        if self.employee_status.is_active:
+            positions = data.get("WorkerPositions")
+            if positions is not None and len(positions) > 0:
+                for position in positions:
+                    position = WorkerPosition(data=position)
+                    if position.is_active_position():
+                        if position.is_primary:
+                            self.primary_manager_id = position.supervisor_eid
+                            self.primary_position = position
+                        else:
+                            self.other_active_positions.append(position)
