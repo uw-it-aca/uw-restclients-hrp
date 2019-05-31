@@ -50,17 +50,13 @@ class EmploymentStatus(models.Model):
 
         self.status = data.get("EmployeeStatus")
         self.status_code = data.get("EmployeeStatusCode")
-        if data.get("EndEmploymentDate") is not None:
-            self.end_emp_date = parse_date(data["EndEmploymentDate"])
+        self.end_emp_date = parse_date(data.get("EndEmploymentDate"))
         self.is_active = data.get("IsActive")
         self.is_retired = data.get("IsRetired")
         self.is_terminated = data.get("IsTerminated")
-        if data.get("HireDate") is not None:
-            self.hire_date = parse_date(data["HireDate"])
-        if data.get("RetirementDate") is not None:
-            self.retirement_date = parse_date(data["RetirementDate"])
-        if data.get("TerminationDate") is not None:
-            self.termination_date = parse_date(data["TerminationDate"])
+        self.hire_date = parse_date(data.get("HireDate"))
+        self.retirement_date = parse_date(data.get("RetirementDate"))
+        self.termination_date = parse_date(data.get("TerminationDate"))
 
     def __str__(self):
         return json.dumps(self.to_json())
@@ -176,10 +172,8 @@ class WorkerPosition(models.Model):
         self.pos_type = data.get("PositionType")
         self.pos_time_type_id = data.get("PositionTimeTypeID")
         self.fte_percent = float(data.get("PositionFTEPercent"))
-        if data.get("PositionStartDate") is not None:
-            self.start_date = parse_date(data["PositionStartDate"])
-        if data.get("PositionEndDate") is not None:
-            self.end_date = parse_date(data["PositionEndDate"])
+        self.start_date = parse_date(data.get("PositionStartDate"))
+        self.end_date = parse_date(data.get("PositionEndDate"))
         if data.get("PositionSupervisor") is not None:
             self.supervisor_eid = data["PositionSupervisor"]["EmployeeID"]
 
