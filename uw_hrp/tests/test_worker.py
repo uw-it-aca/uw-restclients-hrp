@@ -38,6 +38,7 @@ class WorkerTest(TestCase):
                  "end_date": None,
                  "ecs_job_cla_code_desc": "Academic Personnel",
                  'fte_percent': 0.0,
+                 'is_future_date': False,
                  "is_primary": True,
                  "location": "Seattle Campus",
                  "pos_type": "Unpaid_Academic",
@@ -58,6 +59,7 @@ class WorkerTest(TestCase):
              "end_date": None,
              "ecs_job_cla_code_desc": "Academic Personnel",
              'fte_percent': 0.0,
+             'is_future_date': False,
              "is_primary": True,
              "location": "Seattle Campus",
              "pos_type": "Unpaid_Academic",
@@ -73,18 +75,28 @@ class WorkerTest(TestCase):
                  "org_name": "Family Medicine: Volunteer"}})
         self.assertEqual(len(worker.other_active_positions), 0)
 
+        worker = get_worker_by_netid("faculty", current_future=False)
+        self.assertIsNotNone(worker)
+
     def test_get_worker_by_employee_id(self):
         worker = get_worker_by_employee_id("100000015")
-        self.assertTrue(worker.netid,
-                        'chair')
+        self.assertTrue(worker.netid, 'chair')
+
+        worker = get_worker_by_employee_id("100000015", current_future=False)
+        self.assertIsNotNone(worker)
+
         self.assertRaises(InvalidEmployeeID,
                           get_worker_by_employee_id,
                           "")
 
     def test_get_worker_by_regid(self):
         worker = get_worker_by_regid("10000000000000000000000000000015")
-        self.assertTrue(worker.netid,
-                        'chair')
+        self.assertTrue(worker.netid, 'chair')
+
+        worker = get_worker_by_regid("10000000000000000000000000000015",
+                                     current_future=False)
+        self.assertIsNotNone(worker)
+
         self.assertRaises(DataFailureException,
                           get_worker_by_regid,
                           "00000000000000000000000000000001")

@@ -18,17 +18,29 @@ class WorkerTest(TestCase):
         self.assertIsNotNone(str(emp_status))
 
         emp_status = EmploymentStatus(
-            data={
-                "ActiveStatusDate": "1980-07-01T07:00:00.000Z",
-                "EmployeeStatus": "Active",
-                "EmployeeStatusCode": "A",
-                "EndEmploymentDate": "2017-09-16T07:00:00.000Z",
-                "HireDate": "1980-07-01T07:00:00.000Z",
-                "IsActive": True,
-                "OriginalHireDate": "1980-07-01T07:00:00.000Z",
-                "RetirementDate": "2017-09-16T07:00:00.000Z",
-                "TerminationDate": "2017-09-16T07:00:00.000Z"})
+            data={"IsActive": False,
+                  "EmployeeStatus": "Terminated",
+                  "EmployeeStatusCode": "N",
+                  "IsTerminated": True,
+                  "IsRetired": False,
+                  "EndEmploymentDate": "2017-09-16T07:00:00.000Z",
+                  "HireDate": "1980-07-01T07:00:00.000Z",
+                  "RetirementDate": "2017-09-16T07:00:00.000Z",
+                  "TerminationDate": "2017-09-16T07:00:00.000Z"})
         self.assertIsNotNone(str(emp_status))
+        self.assertTrue(emp_status.is_terminated)
+        self.assertFalse(emp_status.is_active)
+        self.assertEqual(
+            emp_status.to_json(),
+            {'end_emp_date': '2017-09-16 07:00:00+00:00',
+             'hire_date': '1980-07-01 07:00:00+00:00',
+             'is_active': False,
+             'is_retired': False,
+             'is_terminated': True,
+             'retirement_date': '2017-09-16 07:00:00+00:00',
+             'status': 'Terminated',
+             'status_code': 'N',
+             'termination_date': '2017-09-16 07:00:00+00:00'})
 
     def test_job_profile(self):
         job_prof = JobProfile(job_code="1", description="A")
@@ -113,6 +125,7 @@ class WorkerTest(TestCase):
                 "end_date": "1997-10-01 00:00:00+00:00",
                 "ecs_job_cla_code_desc": "Professional Staff",
                 "fte_percent": 100.0,
+                'is_future_date': False,
                 "is_primary": True,
                 "location": "Seattle Campus",
                 "pos_type": "Regular",
@@ -133,17 +146,19 @@ class WorkerTest(TestCase):
             data={"PositionStartDate": "1994-10-01T00:00:00.000Z",
                   "PositionEndDate": str(datetime.now(timezone.utc) +
                                          timedelta(minutes=1)),
+                  "IsFutureDate": False,
                   "PositionFTEPercent": "100.00000"})
         self.assertTrue(work_position.is_active_position())
-        self.assertFalse(work_position.is_future_position())
+        self.assertFalse(work_position.is_future_date)
 
         work_position = WorkerPosition(
             data={"PositionStartDate": str(datetime.now(timezone.utc) +
                                            timedelta(minutes=1)),
+                  "IsFutureDate": True,
                   "PositionEndDate": None,
                   "PositionFTEPercent": "100.00000"})
+        self.assertTrue(work_position.is_future_date)
         self.assertTrue(work_position.is_active_position())
-        self.assertTrue(work_position.is_future_position())
 
     def test_worker(self):
         worker = Worker(netid='none',
@@ -273,6 +288,7 @@ class WorkerTest(TestCase):
             {'ecs_job_cla_code_desc': 'Classified Staff',
              'end_date': None,
              'fte_percent': 100.0,
+             'is_future_date': False,
              'is_primary': True,
              'job_profile': {'description': None, 'job_code': None},
              'location': 'Bothell Campus',
@@ -288,14 +304,3 @@ class WorkerTest(TestCase):
         self.assertIsNotNone(str(worker.primary_position))
         self.assertEqual(len(worker.other_active_positions), 0)
         self.assertIsNotNone(str(worker.employee_status))
-        self.assertEqual(
-            worker.employee_status.to_json(),
-            {"end_emp_date": None,
-             "hire_date": "1980-07-01 07:00:00+00:00",
-             "is_active": True,
-             "is_retired": False,
-             "is_terminated": False,
-             "retirement_date": None,
-             "status": "Active",
-             "status_code": "A",
-             "termination_date": None})
