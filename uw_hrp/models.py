@@ -112,6 +112,8 @@ class WorkerPosition(models.Model):
     end_date = models.DateTimeField(null=True, default=None)
     ecs_job_cla_code_desc = models.CharField(max_length=96,
                                              null=True, default=None)
+    payroll_unit_code = models.CharField(max_length=8,
+                                         null=True, default=None)
     is_future_date = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
     location = models.CharField(max_length=96, null=True, default=None)
@@ -134,6 +136,7 @@ class WorkerPosition(models.Model):
                 'is_future_date': self.is_future_date,
                 'is_primary': self.is_primary,
                 'location': self.location,
+                'payroll_unit_code': self.payroll_unit_code,
                 'pos_type': self.pos_type,
                 'pos_time_type_id': self.pos_time_type_id,
                 'title': self.title,
@@ -164,6 +167,7 @@ class WorkerPosition(models.Model):
 
         self.ecs_job_cla_code_desc = \
             data.get("EcsJobClassificationCodeDescription")
+        self.payroll_unit_code = data.get("PayrollUnitCode")
         self.is_future_date = data.get("IsFutureDate")
         self.is_primary = data.get("IsPrimaryPosition")
         if data.get("Location") is not None:

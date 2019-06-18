@@ -9,6 +9,9 @@ from uw_hrp.util import fdao_hrp_override
 @fdao_hrp_override
 class WorkerTest(TestCase):
 
+    def setup(self):
+        self.maxDiff = None
+
     def test_parse_date(self):
         self.assertIsNotNone(parse_date("2017-09-16T07:00:00.000Z"))
 
@@ -128,6 +131,7 @@ class WorkerTest(TestCase):
                 'is_future_date': False,
                 "is_primary": True,
                 "location": "Seattle Campus",
+                "payroll_unit_code": "00702",
                 "pos_type": "Regular",
                 "pos_time_type_id": "Full_time",
                 "title": "Program Operations Specialist (E S 8)",
@@ -299,6 +303,7 @@ class WorkerTest(TestCase):
              'is_primary': True,
              'job_profile': {'description': None, 'job_code': None},
              'location': 'Bothell Campus',
+             'payroll_unit_code': '00356',
              'pos_time_type_id': 'Full_time',
              'pos_type': 'Regular',
              'start_date': '2015-12-21 00:00:00+00:00',
