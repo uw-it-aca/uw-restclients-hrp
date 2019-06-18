@@ -20,22 +20,22 @@ CURRENT_FUTURE_SUFFIX = "workerpositionstate=current,future"
 def get_worker_by_employee_id(employee_id, current_future=True):
     if not PWS().valid_employee_id(employee_id):
         raise InvalidEmployeeID(employee_id)
-    return _get_worker(employee_id, current_future=True)
+    return _get_worker(employee_id, current_future)
 
 
 def get_worker_by_netid(netid, current_future=True):
     if not PWS().valid_uwnetid(netid):
         raise InvalidNetID(netid)
-    return _get_worker(netid, current_future=True)
+    return _get_worker(netid, current_future)
 
 
 def get_worker_by_regid(regid, current_future=True):
     if not PWS().valid_uwregid(regid):
         raise InvalidRegID(regid)
-    return _get_worker(regid, current_future=True)
+    return _get_worker(regid, current_future)
 
 
-def _get_worker(id, current_future=True):
+def _get_worker(id, current_future):
     """
     Return a restclients.models.hrp.WorkerPerson object
     """

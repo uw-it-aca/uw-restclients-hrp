@@ -17,6 +17,7 @@ class WorkerTest(TestCase):
                           get_worker_by_netid,
                           "")
         worker = get_worker_by_netid("faculty")
+        # self.maxDiff = None
         self.assertEqual(
             worker.to_json(),
             {"netid": "faculty",
@@ -41,6 +42,7 @@ class WorkerTest(TestCase):
                  'is_future_date': False,
                  "is_primary": True,
                  "location": "Seattle Campus",
+                 "payroll_unit_code": "00753",
                  "pos_type": "Unpaid_Academic",
                  "pos_time_type_id": "Part_time",
                  "title": "Clinical Associate Professor",
@@ -62,6 +64,7 @@ class WorkerTest(TestCase):
              'is_future_date': False,
              "is_primary": True,
              "location": "Seattle Campus",
+             'payroll_unit_code': '00753',
              "pos_type": "Unpaid_Academic",
              "pos_time_type_id": "Part_time",
              "title": "Clinical Associate Professor",
