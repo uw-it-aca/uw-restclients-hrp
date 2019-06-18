@@ -112,11 +112,11 @@ class WorkerPosition(models.Model):
     end_date = models.DateTimeField(null=True, default=None)
     ecs_job_cla_code_desc = models.CharField(max_length=96,
                                              null=True, default=None)
-    payroll_unit_code = models.CharField(max_length=8,
-                                         null=True, default=None)
     is_future_date = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
     location = models.CharField(max_length=96, null=True, default=None)
+    payroll_unit_code = models.CharField(max_length=8,
+                                         null=True, default=None)
     pos_type = models.CharField(max_length=64, null=True, default=None)
     pos_time_type_id = models.CharField(max_length=64,
                                         null=True, default=None)

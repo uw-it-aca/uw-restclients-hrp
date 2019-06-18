@@ -9,9 +9,6 @@ from uw_hrp.util import fdao_hrp_override
 @fdao_hrp_override
 class WorkerTest(TestCase):
 
-    def setup(self):
-        self.maxDiff = None
-
     def test_get_worker_by_netid(self):
         self.assertRaises(DataFailureException,
                           get_worker_by_netid,
@@ -20,6 +17,7 @@ class WorkerTest(TestCase):
                           get_worker_by_netid,
                           "")
         worker = get_worker_by_netid("faculty")
+        # self.maxDiff = None
         self.assertEqual(
             worker.to_json(),
             {"netid": "faculty",

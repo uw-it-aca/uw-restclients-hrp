@@ -9,9 +9,6 @@ from uw_hrp.util import fdao_hrp_override
 @fdao_hrp_override
 class WorkerTest(TestCase):
 
-    def setup(self):
-        self.maxDiff = None
-
     def test_parse_date(self):
         self.assertIsNotNone(parse_date("2017-09-16T07:00:00.000Z"))
 
@@ -57,6 +54,7 @@ class WorkerTest(TestCase):
         self.assertIsNotNone(str(super_org))
 
     def test_worker_position(self):
+        # self.maxDiff = None
         pos = WorkerPosition()
         self.assertIsNotNone(str(pos))
         data = {
