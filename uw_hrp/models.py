@@ -260,7 +260,7 @@ class WorkerRef(models.Model):
                 'is_active': self.is_active,
                 'is_current_faculty': self.is_current_faculty,
                 'workday_person_type': self.workday_person_type,
-                'href': self.worker_href}
+                'href': self.href}
 
     def __str__(self):
         return json.dumps(self.to_json())
@@ -268,7 +268,7 @@ class WorkerRef(models.Model):
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
         if data is None:
-            return super(Worker, self).__init__(*args, **kwargs)
+            return super(WorkerRef, self).__init__(*args, **kwargs)
         self.netid = data.get("NetID")
         self.regid = data.get("RegID")
         self.employee_id = data.get("EmployeeID")
@@ -276,4 +276,4 @@ class WorkerRef(models.Model):
         self.is_active = data.get("IsActive")
         self.is_current_faculty = data.get("IsCurrentFaculty")
         self.workday_person_type = data.get("WorkdayPersonType")
-        self.worker_href = data.get("Href")
+        self.href = data.get("Href")

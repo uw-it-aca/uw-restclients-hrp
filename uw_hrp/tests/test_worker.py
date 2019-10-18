@@ -111,16 +111,5 @@ class WorkerTest(TestCase):
         worker_refs = worker_search(changed_since=2019)
         self.assertEqual(len(worker_refs), 2)
         self.assertEqual(worker_refs[0].netid, "faculty")
-        self.assertEqual(
-            worker_refs[0].to_json(),
-            {'employee_id': '000000005',
-             'employee_status': 'Active',
-             'is_active': True,
-             'is_current_faculty': True,
-             'netid': 'faculty',
-             'regid': '10000000000000000000000000000005',
-             'workday_person_type': 'Employee',
-             'href': '/hrp/v2/worker/10000000000000000000000000000005.json'})
-        self.assertIsNotNone(str(worker_refs[0]))
         self.assertTrue(worker_refs[1].is_terminated())
         self.assertEqual(worker_refs[1].netid, "chair")
