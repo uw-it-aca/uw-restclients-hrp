@@ -23,7 +23,6 @@ setup(
     include_package_data=True,
     install_requires=[
         'UW-RestClients-Core<2.0',
-        'UW-RestClients-PWS<3.0',
         'python-dateutil'
     ],
     license='Apache License, Version 2.0',
