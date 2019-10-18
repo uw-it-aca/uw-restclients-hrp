@@ -345,7 +345,7 @@ class WorkerTest(TestCase):
         print(wr)
         wr = WorkerRef(
             data={
-                'Href': '/hrp/v2/worker/{}.json'.format(regid), 
+                'Href': '/hrp/v2/worker/{}.json'.format(regid),
                 'EmployeeID': '000000005',
                 'EmployeeStatus': 'Active',
                 'IsActive': True,

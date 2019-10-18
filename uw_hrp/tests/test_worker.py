@@ -113,3 +113,6 @@ class WorkerTest(TestCase):
         self.assertEqual(worker_refs[0].netid, "faculty")
         self.assertTrue(worker_refs[1].is_terminated())
         self.assertEqual(worker_refs[1].netid, "chair")
+
+        none = worker_search(changed_since=2020)
+        self.assertEqual(len(none), 0)
