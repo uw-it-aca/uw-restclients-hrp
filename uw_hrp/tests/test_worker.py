@@ -2,7 +2,8 @@ from unittest import TestCase
 from restclients_core.exceptions import (
     DataFailureException, InvalidEmployeeID, InvalidRegID, InvalidNetID)
 from uw_hrp.worker import (
-    get_worker_by_netid, get_worker_by_employee_id, get_worker_by_regid)
+    get_worker_by_netid, get_worker_by_employee_id, get_worker_by_regid,
+    worker_search)
 from uw_hrp.util import fdao_hrp_override
 
 
@@ -105,3 +106,13 @@ class WorkerTest(TestCase):
                           "00000000000000000000000000000001")
         self.assertRaises(InvalidRegID,
                           get_worker_by_regid, "000")
+
+    def test_worker_search(self):
+        worker_refs = worker_search(changed_since=2019)
+        self.assertEqual(len(worker_refs), 2)
+        self.assertEqual(worker_refs[0].netid, "faculty")
+        self.assertTrue(worker_refs[1].is_terminated())
+        self.assertEqual(worker_refs[1].netid, "chair")
+
+        none = worker_search(changed_since=2020)
+        self.assertEqual(len(none), 0)

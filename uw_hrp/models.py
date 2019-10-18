@@ -225,7 +225,8 @@ class Worker(models.Model):
         self.employee_status = EmploymentStatus(
             data=data.get("WorkerEmploymentStatus"))
 
-        if self.employee_status.is_active:
+        if (self.employee_status.is_active or
+                self.employee_status.is_retired):
             positions = data.get("WorkerPositions")
             if positions is not None and len(positions) > 0:
                 for position in positions:
@@ -236,3 +237,43 @@ class Worker(models.Model):
                             self.primary_position = position
                         else:
                             self.other_active_positions.append(position)
+
+
+class WorkerRef(models.Model):
+    netid = models.CharField(max_length=32)
+    regid = models.CharField(max_length=32)
+    employee_id = models.CharField(max_length=16)
+    employee_status = models.CharField(max_length=32)
+    is_active = models.BooleanField(default=False)
+    is_current_faculty = models.BooleanField(default=False)
+    workday_person_type = models.CharField(max_length=64)
+    href = models.CharField(max_length=255)
+
+    def is_terminated(self):
+        return self.employee_status == "Terminated"
+
+    def to_json(self):
+        return {"netid": self.netid,
+                'regid': self.regid,
+                'employee_id': self.employee_id,
+                'employee_status': self.employee_status,
+                'is_active': self.is_active,
+                'is_current_faculty': self.is_current_faculty,
+                'workday_person_type': self.workday_person_type,
+                'href': self.href}
+
+    def __str__(self):
+        return json.dumps(self.to_json())
+
+    def __init__(self, *args, **kwargs):
+        data = kwargs.get("data")
+        if data is None:
+            return super(WorkerRef, self).__init__(*args, **kwargs)
+        self.netid = data.get("NetID")
+        self.regid = data.get("RegID")
+        self.employee_id = data.get("EmployeeID")
+        self.employee_status = data.get("EmployeeStatus")
+        self.is_active = data.get("IsActive")
+        self.is_current_faculty = data.get("IsCurrentFaculty")
+        self.workday_person_type = data.get("WorkdayPersonType")
+        self.href = data.get("Href")

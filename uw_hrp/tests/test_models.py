@@ -2,7 +2,7 @@ from unittest import TestCase
 from datetime import datetime, timedelta, timezone
 from uw_hrp.models import (
     EmploymentStatus, JobProfile, SupervisoryOrganization,
-    Worker, WorkerPosition, parse_date)
+    Worker, WorkerPosition, parse_date, WorkerRef)
 from uw_hrp.util import fdao_hrp_override
 
 
@@ -337,3 +337,31 @@ class WorkerTest(TestCase):
         self.assertTrue(worker.employee_status.is_terminated)
         self.assertFalse(worker.employee_status.is_active)
         self.assertIsNotNone(str(worker))
+
+    def test_workerref(self):
+        regid = '10000000000000000000000000000005'
+        wr = WorkerRef(netid="test", regid=regid)
+        self.assertIsNotNone(wr)
+        print(wr)
+        wr = WorkerRef(
+            data={
+                'Href': '/hrp/v2/worker/{}.json'.format(regid),
+                'EmployeeID': '000000005',
+                'EmployeeStatus': 'Active',
+                'IsActive': True,
+                'NetID': 'faculty',
+                'RegID': '10000000000000000000000000000005',
+                'IsCurrentFaculty': True,
+                'WorkdayPersonType': 'Employee'})
+        self.assertFalse(wr.is_terminated())
+        self.assertEqual(
+            wr.to_json(),
+            {'employee_id': '000000005',
+             'employee_status': 'Active',
+             'is_active': True,
+             'is_current_faculty': True,
+             'netid': 'faculty',
+             'regid': '10000000000000000000000000000005',
+             'workday_person_type': 'Employee',
+             'href': '/hrp/v2/worker/10000000000000000000000000000005.json'})
+        self.assertIsNotNone(str(wr))
