@@ -18,29 +18,36 @@ class WorkerTest(TestCase):
         self.assertIsNotNone(str(emp_status))
 
         emp_status = EmploymentStatus(
-            data={"IsActive": False,
-                  "EmployeeStatus": "Terminated",
-                  "EmployeeStatusCode": "N",
-                  "IsTerminated": True,
-                  "IsRetired": False,
-                  "EndEmploymentDate": "2017-09-16T07:00:00.000Z",
-                  "HireDate": "1980-07-01T07:00:00.000Z",
-                  "RetirementDate": "2017-09-16T07:00:00.000Z",
-                  "TerminationDate": "2017-09-16T07:00:00.000Z"})
+            data={
+                "HireDate": "2016-03-01T08:00:00.000Z",
+                "OriginalHireDate": "1982-12-31T08:00:00.000Z",
+                "EndEmploymentDate": "2019-05-30T07:00:00.000Z",
+                "FirstDayOfWork": "2016-03-01T08:00:00.000Z",
+                "ActiveStatusDate": "2016-03-01T08:00:00.000Z",
+                "IsActive": True,
+                "EmployeeStatus": "Active",
+                "EmployeeStatusCode": "A",
+                "IsTerminated": False,
+                "TerminationDate": None,
+                "IsRetired": False,
+                "RetirementDate": None,
+                "EstimatedLastDayOfLeave": None,
+                "FirstDayOfLeave": None,
+                "LastDayOfWorkForLeave": None})
         self.assertIsNotNone(str(emp_status))
-        self.assertTrue(emp_status.is_terminated)
-        self.assertFalse(emp_status.is_active)
+        self.assertFalse(emp_status.is_terminated)
+        self.assertFalse(emp_status.is_active_employment())
         self.assertEqual(
             emp_status.to_json(),
-            {'end_emp_date': '2017-09-16 07:00:00+00:00',
-             'hire_date': '1980-07-01 07:00:00+00:00',
-             'is_active': False,
+            {'end_emp_date': '2019-05-30 07:00:00+00:00',
+             'hire_date': '2016-03-01 08:00:00+00:00',
+             'is_active': True,
              'is_retired': False,
-             'is_terminated': True,
-             'retirement_date': '2017-09-16 07:00:00+00:00',
-             'status': 'Terminated',
-             'status_code': 'N',
-             'termination_date': '2017-09-16 07:00:00+00:00'})
+             'is_terminated': False,
+             'retirement_date': None,
+             'status': 'Active',
+             'status_code': 'A',
+             'termination_date': None})
 
     def test_job_profile(self):
         job_prof = JobProfile(job_code="1", description="A")
@@ -174,6 +181,7 @@ class WorkerTest(TestCase):
                         regid="10000000",
                         employee_id="100000115")
         self.assertIsNotNone(str(worker))
+
         data = {
             "NetID": "webmaster",
             "RegID": "10000000000000000000000000000115",
@@ -325,7 +333,7 @@ class WorkerTest(TestCase):
                 "EmployeeStatus": "Terminated",
                 "EmployeeStatusCode": "N",
                 "IsTerminated": True,
-                "EndEmploymentDate": None,
+                "EndEmploymentDate": "2018-07-01T07:00:00.000Z",
                 "HireDate": "1980-07-01T07:00:00.000Z",
                 "IsRetired": False,
                 "RetirementDate": None,
@@ -342,7 +350,6 @@ class WorkerTest(TestCase):
         regid = '10000000000000000000000000000005'
         wr = WorkerRef(netid="test", regid=regid)
         self.assertIsNotNone(wr)
-        print(wr)
         wr = WorkerRef(
             data={
                 'Href': '/hrp/v2/worker/{}.json'.format(regid),
