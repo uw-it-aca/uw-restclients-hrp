@@ -9,6 +9,10 @@ def get_now():
     return datetime.now(timezone.utc)
 
 
+def is_future_end_date(end_date):
+    return end_date is None or end_date > get_now()
+
+
 def date_to_str(d_obj):
     if d_obj is not None:
         return str(d_obj)
@@ -31,6 +35,9 @@ class EmploymentStatus(models.Model):
     end_emp_date = models.DateTimeField(null=True, default=None)
     retirement_date = models.DateTimeField(null=True, default=None)
     termination_date = models.DateTimeField(null=True, default=None)
+
+    def is_active_employment(self):
+        return self.is_active and is_future_end_date(self.end_emp_date)
 
     def to_json(self):
         return {'end_emp_date': date_to_str(self.end_emp_date),
@@ -126,7 +133,7 @@ class WorkerPosition(models.Model):
     title = models.CharField(max_length=128, null=True, default=None)
 
     def is_active_position(self):
-        return self.end_date is None or self.end_date > get_now()
+        return is_future_end_date(self.end_date)
 
     def to_json(self):
         data = {'start_date': date_to_str(self.start_date),
@@ -225,8 +232,8 @@ class Worker(models.Model):
         self.employee_status = EmploymentStatus(
             data=data.get("WorkerEmploymentStatus"))
 
-        if (self.employee_status.is_active or
-                self.employee_status.is_retired):
+        if self.employee_status.is_active_employment():
+
             positions = data.get("WorkerPositions")
             if positions is not None and len(positions) > 0:
                 for position in positions:
