@@ -4,26 +4,26 @@
 from unittest import TestCase
 from restclients_core.exceptions import (
     DataFailureException, InvalidEmployeeID, InvalidRegID, InvalidNetID)
-from uw_hrp.worker import (
-    get_worker_by_netid, get_worker_by_employee_id, get_worker_by_regid,
-    worker_search)
+from uw_hrp.person import (
+    get_person_by_netid, get_person_by_employee_id, get_person_by_regid,
+    person_search)
 from uw_hrp.util import fdao_hrp_override
 
 
 @fdao_hrp_override
 class WorkerTest(TestCase):
 
-    def test_get_worker_by_netid(self):
+    def test_get_person_by_netid(self):
         self.assertRaises(DataFailureException,
-                          get_worker_by_netid,
+                          get_person_by_netid,
                           "None")
         self.assertRaises(InvalidNetID,
-                          get_worker_by_netid,
+                          get_person_by_netid,
                           "")
-        worker = get_worker_by_netid("faculty")
+        person = get_person_by_netid("faculty")
         # self.maxDiff = None
         self.assertEqual(
-            worker.to_json(),
+            person.to_json(),
             {"netid": "faculty",
              "regid": "10000000000000000000000000000005",
              "employee_id": "000000005",
@@ -58,9 +58,9 @@ class WorkerTest(TestCase):
                      "budget_code": "3040111000",
                      "org_code": "SOM",
                      "org_name": "Family Medicine: Volunteer"}}]})
-        self.assertIsNotNone(str(worker))
+        self.assertIsNotNone(str(person))
         self.assertEqual(
-            worker.primary_position.to_json(),
+            person.primary_position.to_json(),
             {"start_date": "2012-07-01 00:00:00+00:00",
              "end_date": None,
              "ecs_job_cla_code_desc": "Academic Personnel",
@@ -80,42 +80,42 @@ class WorkerTest(TestCase):
                  "budget_code": "3040111000",
                  "org_code": "SOM",
                  "org_name": "Family Medicine: Volunteer"}})
-        self.assertEqual(len(worker.other_active_positions), 0)
+        self.assertEqual(len(person.other_active_positions), 0)
 
-        worker = get_worker_by_netid("faculty", current_future=False)
-        self.assertIsNotNone(worker)
+        person = get_person_by_netid("faculty", current_future=False)
+        self.assertIsNotNone(person)
 
-    def test_get_worker_by_employee_id(self):
-        worker = get_worker_by_employee_id("100000015")
-        self.assertTrue(worker.netid, 'chair')
+    def test_get_person_by_employee_id(self):
+        person = get_person_by_employee_id("100000015")
+        self.assertTrue(person.netid, 'chair')
 
-        worker = get_worker_by_employee_id("100000015", current_future=False)
-        self.assertIsNotNone(worker)
+        person = get_person_by_employee_id("100000015", current_future=False)
+        self.assertIsNotNone(person)
 
         self.assertRaises(InvalidEmployeeID,
-                          get_worker_by_employee_id,
+                          get_person_by_employee_id,
                           "")
 
-    def test_get_worker_by_regid(self):
-        worker = get_worker_by_regid("10000000000000000000000000000015")
-        self.assertTrue(worker.netid, 'chair')
+    def test_get_person_by_regid(self):
+        person = get_person_by_regid("10000000000000000000000000000015")
+        self.assertTrue(person.netid, 'chair')
 
-        worker = get_worker_by_regid("10000000000000000000000000000015",
+        person = get_person_by_regid("10000000000000000000000000000015",
                                      current_future=False)
-        self.assertIsNotNone(worker)
+        self.assertIsNotNone(person)
 
         self.assertRaises(DataFailureException,
-                          get_worker_by_regid,
+                          get_person_by_regid,
                           "00000000000000000000000000000001")
         self.assertRaises(InvalidRegID,
-                          get_worker_by_regid, "000")
+                          get_person_by_regid, "000")
 
-    def test_worker_search(self):
-        worker_refs = worker_search(changed_since=2019)
-        self.assertEqual(len(worker_refs), 2)
-        self.assertEqual(worker_refs[0].netid, "faculty")
-        self.assertTrue(worker_refs[1].is_terminated())
-        self.assertEqual(worker_refs[1].netid, "chair")
+    def test_person_search(self):
+        persons = person_search(changed_since=2019)
+        self.assertEqual(len(persons), 2)
+        self.assertEqual(persons[0].netid, "faculty")
+        self.assertTrue(persons[1].is_terminated())
+        self.assertEqual(persons[1].netid, "chair")
 
-        none = worker_search(changed_since=2020)
+        none = person_search(changed_since=2020)
         self.assertEqual(len(none), 0)
