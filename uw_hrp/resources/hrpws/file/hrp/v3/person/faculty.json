@@ -1,11 +1,11 @@
 {
   "Name": "Bill Faculty",
   "EmployeeID": "000000005",
-  "RegID": "707D9C88AE3411D689DA0004AC494FFE",
+  "RegID": "10000000000000000000000000000005",
   "IDs": [
     {
       "Type": "RegID",
-      "Value": "707D9C88AE3411D689DA0004AC494FFE"
+      "Value": "10000000000000000000000000000005"
     },
     {
       "Type": "EmployeeID",
@@ -17,22 +17,22 @@
     },
     {
       "Type": "StudentID",
-      "Value": "9551266"
+      "Value": "1000005"
     },
     {
       "Type": "PriorRegID",
-      "Value": "87BBD0CEECDB11DA8CA4B66218DF4B67"
+      "Value": "10000000000000000000000000000001"
     },
     {
       "Type": "PriorRegID",
-      "Value": "C12D0A0E26264104A7E3EA06CF0BFAC3"
+      "Value": "10000000000000000000000000000002"
     },
     {
       "Type": "PriorRegID",
-      "Value": "CBFE9CD6C0A911D88E389FD552873A55"
+      "Value": "10000000000000000000000000000003"
     }
   ],
-  "Href": "/hrp/v3/person/707D9C88AE3411D689DA0004AC494FFE.json",
+  "Href": "/hrp/v3/person/10000000000000000000000000000005.json",
   "RepositoryTimeStamp": "2022-11-29T10:56:28.477-08:00",
   "FirstName": "Bill",
   "LastName": "Faculty",
@@ -392,7 +392,7 @@
                 ]
               },
               "Organization": {
-                "Name": "SOM: Family Medicine: King Pierce JM Academic (James, Paul (Inherited))",
+                "Name": "SOM: Family Medicine: King Pierce JM Academic (... (Inherited))",
                 "WID": "751e82d2c30301b7f5dc547e053971d4",
                 "IDs": [
                   {
@@ -461,7 +461,7 @@
           "CompensationMostRecentChangeDate": "2021-03-16T00:00:00-07:00",
           "Managers": [
             {
-              "Name": "James, Paul",
+              "Name": "Joj, Pop",
               "WID": "1b68136df25201eb472087dad162bca4",
               "IDs": [
                 {
@@ -479,7 +479,7 @@
           "IsManager": false,
           "ProbationEndDate": null,
           "SupervisoryOrganization": {
-            "Name": "SOM: Family Medicine: King Pierce JM Academic (James, Paul (Inherited))",
+            "Name": "SOM: Family Medicine: King Pierce JM Academic (... (Inherited))",
             "WID": "751e82d2c30301b7f5dc547e053971d4",
             "IDs": [
               {
@@ -657,7 +657,7 @@
             ]
           },
           "Organization": {
-            "Name": "SOM: Family Medicine: King Pierce JM Academic (James, Paul (Inherited))",
+            "Name": "SOM: Family Medicine: King Pierce JM Academic (... (Inherited))",
             "WID": "751e82d2c30301b7f5dc547e053971d4",
             "IDs": [
               {
@@ -1086,7 +1086,7 @@
                   }
                 ]
               },
-              "EmailAddress": "bill.faculty@multicare.org",
+              "EmailAddress": "bill.faculty@m.org",
               "Usages": [
                 {
                   "Types": [
@@ -1133,8 +1133,8 @@
               },
               "CountryISOCode": "USA",
               "InternationalPhoneCode": "1",
-              "PhoneNumber": "2533240416",
-              "FormattedPhoneNumber": "+1 (253) 3240416",
+              "PhoneNumber": "",
+              "FormattedPhoneNumber": "",
               "DeviceType": {
                 "Name": "Mobile",
                 "WID": "d957207a3068014f9b80c9cc665c3713",
@@ -1193,8 +1193,8 @@
               },
               "CountryISOCode": "USA",
               "InternationalPhoneCode": "1",
-              "PhoneNumber": "2536975757",
-              "FormattedPhoneNumber": "+1 (253) 6975757",
+              "PhoneNumber": "",
+              "FormattedPhoneNumber": "",
               "DeviceType": {
                 "Name": "Telephone",
                 "WID": "d957207a306801bfcadadacc665c3913",
@@ -1237,7 +1237,7 @@
               ]
             }
           ],
-          "CampusMailbox": "356390"
+          "CampusMailbox": ""
         },
         "CustomIDs": []
       },
