@@ -305,8 +305,8 @@ class ModelsTest(TestCase):
                 'worker_details': [
                     {
                         'active_positions': [],
-                        'employee_status': {'hire_date': 
-                                                '2021-11-12 00:00:00-08:00',
+                        'employee_status': {'hire_date':
+                                            '2021-11-12 00:00:00-08:00',
                                             'is_active': True,
                                             'is_retired': False,
                                             'is_terminated': False,
