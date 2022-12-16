@@ -38,13 +38,12 @@ class EmploymentStatus(models.Model):
     termination_date = models.DateTimeField(null=True, default=None)
 
     def to_json(self):
-        return {
+        return {'status': self.status,
                 'hire_date': date_to_str(self.hire_date),
                 'is_active': self.is_active,
                 'is_retired': self.is_retired,
                 'is_terminated': self.is_terminated,
                 'retirement_date': date_to_str(self.retirement_date),
-                'status': self.status,
                 'termination_date': date_to_str(self.termination_date)}
 
     def __init__(self, *args, **kwargs):
@@ -69,8 +68,10 @@ class JobProfile(models.Model):
     description = models.CharField(max_length=96, null=True, default=None)
 
     def to_json(self):
-        return {'job_code': self.job_code,
-                'description': self.description}
+        return {
+                'job_code': self.job_code,
+                'description': self.description
+                }
 
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
@@ -79,7 +80,7 @@ class JobProfile(models.Model):
 
         self.description = data.get("Name")
         ids = data.get("IDs")
-        if ids  is not None and len(ids):
+        if ids is not None and len(ids):
             for id_data in ids:
                 if id_data.get("Type") == "Job_Profile_ID":
                     self.job_code = id_data.get("Value")
@@ -94,9 +95,11 @@ class SupervisoryOrganization(models.Model):
     org_name = models.CharField(max_length=128, null=True, default=None)
 
     def to_json(self):
-        return {'budget_code': self.budget_code,
+        return {
+                # 'budget_code': self.budget_code,
                 'org_code': self.org_code,
-                'org_name': self.org_name}
+                'org_name': self.org_name
+                }
 
     def __init__(self, *args, **kwargs):
         data = kwargs.get("data")
@@ -178,28 +181,29 @@ class EmploymentDetails(models.Model):
                         if len(name_data[1]) > 0:
                             self.job_class = name_data[1].strip()
                             if " (" in self.job_class:
-                                self.job_class = self.job_class.split(" (", 1)[0]
+                                self.job_class = self.job_class.split(
+                                    " (", 1)[0]
 
         self.title = data.get("BusinessTitle")
         self.fte_percent = float(data.get("FTEPercent"))
         self.is_primary = data.get("PrimaryPosition")
-
+        self.start_date = parse_date(data.get("StartDate"))
+        self.end_date = parse_date(data.get("PositionVacateDate"))
         if data.get("Location") is not None:
             self.location = data["Location"].get("Name")
 
-        if data.get("OrganizationDetails") is not None:
-            org = data["OrganizationDetails"].get("Organization")
+        org_details = data.get("OrganizationDetails")
+        if org_details is not None and len(org_details) > 0:
+            org = org_details[0].get("Organization")
             if org is not None:
                 self.org_unit_code = org.get("Name")
 
         if data.get("PositionWorkerType") is not None:
             self.pos_type = data["PositionWorkerType"].get("Name")
 
-        self.start_date = parse_date(data.get("StartDate"))
-        self.end_date = parse_date(data.get("PositionVacateDate"))
-
-        if data.get("Managers") is not None:
-            ids = data["Managers"].get("IDs")
+        managers = data.get("Managers")
+        if managers is not None and len(managers) > 0:
+            ids = managers[0].get("IDs")
             for id_data in ids:
                 if id_data.get("Type") == "Employee_ID":
                     self.supervisor_eid = id_data.get("Value")
@@ -212,13 +216,14 @@ class WorkerDetails(models.Model):
         max_length=16, null=True, default=None)
 
     def to_json(self):
-        data = {'worker_wid': self.worker_wid,
-                'employee_status': None,
-                'primary_manager_id': self.primary_manager_id}
-
-        if self.employee_status is not None:
-            data['employee_status'] = self.employee_status.to_json()
-
+        data = {
+            'worker_wid': self.worker_wid,
+            'employee_status': (
+                self.employee_status.to_json() if self.employee_status
+                else None),
+            'primary_manager_id': self.primary_manager_id,
+            'active_positions': []
+        }
         positions = []
         if self.primary_position is not None:
             positions.append(self.primary_position.to_json())
@@ -293,7 +298,7 @@ class Person(models.Model):
             return super(Person, self).__init__(*args, **kwargs)
 
         self.employee_id = data.get("EmployeeID")
-        self.regid = id.get("RegID")
+        self.regid = data.get("RegID")
 
         for id in data.get("IDs"):
             if id.get("Type") == "NetID":
