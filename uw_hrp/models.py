@@ -198,22 +198,15 @@ class EmploymentDetails(models.Model):
                 if id_data.get("Type") == "Employee_ID":
                     self.supervisor_eid = id_data.get("Value")
 
-        """
-        org_details = data.get("OrganizationDetails")
-        if org_details and len(org_details) > 0:
-            org = org_details[0].get("Organization")
-            if org is not None:
-                self.org_unit_code = org.get("Name")
-        """
-
         if data.get("PositionWorkerType") is not None:
             self.pos_type = data["PositionWorkerType"].get("Name")
-        
+
         self.is_primary = data.get("PrimaryPosition")
         self.end_date = parse_date(data.get("PositionVacateDate"))
         self.start_date = parse_date(data.get("StartDate"))
         self.supervisory_org = SupervisoryOrganization(
             data=data.get("SupervisoryOrganization"))
+
 
 class WorkerDetails(models.Model):
     worker_wid = models.CharField(max_length=32)
