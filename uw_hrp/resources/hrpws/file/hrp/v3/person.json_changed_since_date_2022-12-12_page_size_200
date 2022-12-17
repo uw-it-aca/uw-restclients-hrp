@@ -53,20 +53,20 @@
   "Persons": [
     {
       "Name": "Contingent Worker",
-      "EmployeeID": "815002498",
-      "RegID": "00007849034F4C293699EDAE5E3A11F0",
+      "EmployeeID": "100000001",
+      "RegID": "00000000000000000000000000000001",
       "IDs": [
         {
           "Type": "RegID",
-          "Value": "00007849034F4C293699EDAE5E3A11F0"
+          "Value": "00000000000000000000000000000001"
         },
         {
           "Type": "EmployeeID",
-          "Value": "815002498"
+          "Value": "100000001"
         },
         {
           "Type": "NetID",
-          "Value": "rkabir"
+          "Value": "abcde"
         },
         {
           "Type": "StudentID",
@@ -77,7 +77,7 @@
           "Value": "T000072061"
         }
       ],
-      "Href": "/hrp/v3/person/00007849034F4C293699EDAE5E3A11F0.json",
+      "Href": "/hrp/v3/person/00000000000000000000000000000001.json",
       "RepositoryTimeStamp": "2022-11-29T10:47:11.676-08:00",
       "FirstName": "Contingent",
       "LastName": "Worker",
@@ -93,7 +93,7 @@
             },
             {
               "Type": "Contingent_Worker_ID",
-              "Value": "815002498"
+              "Value": "100000001"
             }
           ],
           "WorkerType": "Contingent Worker",
@@ -339,7 +339,7 @@
                     ]
                   },
                   "Organization": {
-                    "Name": "352805",
+                    "Name": "",
                     "WID": "d957207a3068010205dd8e2b6f5c7136",
                     "IDs": [
                       {
@@ -348,11 +348,11 @@
                       },
                       {
                         "Type": "Organization_Reference_ID",
-                        "Value": "352805"
+                        "Value": ""
                       },
                       {
                         "Type": "Custom_Organization_Reference_ID",
-                        "Value": "352805"
+                        "Value": ""
                       }
                     ]
                   }
@@ -373,7 +373,7 @@
                     ]
                   },
                   "Organization": {
-                    "Name": "UAA: SAS - FYP Program JM Contingent Worker (Skirven, Matt (Inherited))",
+                    "Name": "UAA: SAS - FYP Program JM Contingent Worker (... (Inherited))",
                     "WID": "995754e647b7012cc88d14001864a959",
                     "IDs": [
                       {
@@ -554,7 +554,7 @@
                 ]
               },
               "Organization": {
-                "Name": "352805",
+                "Name": "",
                 "WID": "d957207a3068010205dd8e2b6f5c7136",
                 "IDs": [
                   {
@@ -563,11 +563,11 @@
                   },
                   {
                     "Type": "Organization_Reference_ID",
-                    "Value": "352805"
+                    "Value": ""
                   },
                   {
                     "Type": "Custom_Organization_Reference_ID",
-                    "Value": "352805"
+                    "Value": ""
                   }
                 ]
               }
@@ -731,7 +731,7 @@
                       }
                     ]
                   },
-                  "EmailAddress": "rkabir@uw.edu",
+                  "EmailAddress": "abcde@uw.edu",
                   "Usages": [
                     {
                       "Types": [

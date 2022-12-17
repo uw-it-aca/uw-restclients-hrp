@@ -5,7 +5,8 @@ from unittest import TestCase
 from datetime import datetime, timedelta, timezone
 from uw_hrp.models import (
     EmploymentStatus, JobProfile, SupervisoryOrganization,
-    EmploymentDetails, WorkerDetails, Person, parse_date)
+    EmploymentDetails, WorkerDetails, Person, parse_date,
+    get_emp_program_job_class)
 from uw_hrp.util import fdao_hrp_override
 
 
@@ -14,6 +15,25 @@ class ModelsTest(TestCase):
 
     def test_parse_date(self):
         self.assertIsNotNone(parse_date("2017-09-16T07:00:00.000Z"))
+
+    def test_get_emp_program_job_class(self):
+        data = [{
+            "JobClassification": {
+                "Name": "S - Stipend (Employment Program)",
+                "WID": ""
+            },
+            "JobClassificationGroup": {
+                "Name": "Employment Program",
+                "WID": ""
+            }
+        }]
+        self.assertEqual(get_emp_program_job_class(data), 'Stipend')
+
+    def get_org_code_name(self):
+        data = "CAS: Chemistry: Theberge JM Student ()"
+        code, name = get_org_code_name(data)
+        self.assertEqual(code, "CAS")
+        self.assertEqual(name, "Chemistry: Theberge JM Student ()")
 
     def test_employment_status(self):
         emp_status0 = EmploymentStatus(status="Active", is_active=True)
@@ -93,19 +113,20 @@ class ModelsTest(TestCase):
 
     def test_supervisory_organization(self):
         super_org = SupervisoryOrganization(
-            org_code="HSA:",
+            org_code="HSA",
             org_name="EHS: Occl Health - Acc Prevention")
         self.assertIsNotNone(super_org)
         super_org = SupervisoryOrganization(
             data={
-                "Name": "SOM: Family Medicine: King Pierce JM Academic ( ())",
+                "Name": "SOM: Family Medicine: King Academic (... ())",
             }
         )
         self.assertEqual(
             super_org.to_json(),
             {
+                'budget_code': '',
                 'org_code': 'SOM',
-                'org_name': 'Family Medicine: King Pierce JM Academic'
+                'org_name': 'Family Medicine: King Academic'
             }
         )
         self.assertIsNotNone(str(super_org))
@@ -117,7 +138,7 @@ class ModelsTest(TestCase):
             data={
                 "PrimaryPosition": True,
                 "BusinessTitle": "Clinical Associate Professor",
-                "FTEPercent": 0.0,
+                "JobScheduledWeeklyHours": 20.0,
                 "StartDate": "2012-07-01T00:00:00-07:00",
                 "PositionVacateDate": None,
                 "JobProfile": {
@@ -129,20 +150,16 @@ class ModelsTest(TestCase):
                 "JobClassificationSummaries": [
                     {
                         "JobClassification": {
-                            "Name": "F - Academic Personnel (Employment)",
+                            "Name": "F - Academic Personnel (Employment)"
                         },
+                        "JobClassificationGroup": {
+                            "Name": "Employment Program"
+                        }
                     }
                 ],
                 "Location": {
                     "Name": "Seattle Campus",
                 },
-                "OrganizationDetails": [
-                    {
-                        "Organization": {
-                            "Name": "12",
-                        }
-                    }
-                ],
                 "Managers": [
                     {
                         "Name": "Joj, Pop",
@@ -160,27 +177,28 @@ class ModelsTest(TestCase):
                 }
             }
         )
+        self.maxDiff = None
         self.assertEqual(
             emp_details.to_json(),
             {
                 'end_date': None,
-                'fte_percent': 0.0,
                 'is_primary': True,
                 'job_class': 'Academic Personnel',
+                'job_title': 'Clinical Associate Professor',
                 'job_profile': {
                     'description': 'Unpaid Academic',
                     'job_code': None
                 },
                 'location': 'Seattle Campus',
-                'org_unit_code': '12',
+                'org_unit_code': '',
                 'pos_type': 'Unpaid Academic',
                 'start_date': '2012-07-01 00:00:00-07:00',
                 'supervisor_eid': '123456789',
                 'supervisory_org': {
+                    'budget_code': '',
                     'org_code': 'SOM',
                     'org_name': 'Family Medicine'
-                },
-                'title': 'Clinical Associate Professor'
+                }
             }
         )
         self.assertIsNotNone(str(emp_details))
@@ -193,6 +211,7 @@ class ModelsTest(TestCase):
             {
                 'active_positions': [],
                 'employee_status': None,
+                'primary_job_title': None,
                 'primary_manager_id': None,
                 'worker_wid': '1b68136df25201c0710e3ddad462fa1d'
             }
@@ -225,6 +244,7 @@ class ModelsTest(TestCase):
             work_position.to_json(),
             {
                 'worker_wid': "1b68136df25201c0710e3ddad462fa1d",
+                'primary_job_title': None,
                 'primary_manager_id': None,
                 'employee_status': {
                     'hire_date': '2022-06-13 00:00:00-07:00',
@@ -285,7 +305,18 @@ class ModelsTest(TestCase):
                         "DisplayLeave": False,
                         "LeaveStatusDetails": []
                     },
-                    "EmploymentDetails": [],
+                    "EmploymentDetails": [
+                        {
+                            "PrimaryPosition": True,
+                            "BusinessTitle": "Student Assistant (NE H)",
+                            "StartDate": "2021-11-12T00:00:00-08:00",
+                            "PositionVacateDate": None,
+                            "JobClassificationSummaries": [],
+                            "SupervisoryOrganization": {
+                                "Name": "CAS: Chemistry: JM student ()",
+                            },
+                        }
+                    ],
                     "OrganizationDetails": [],
                     "ActiveAppointment": True,
                 }
@@ -304,15 +335,36 @@ class ModelsTest(TestCase):
                 'student_id': '1000005',
                 'worker_details': [
                     {
-                        'active_positions': [],
-                        'employee_status': {'hire_date':
-                                            '2021-11-12 00:00:00-08:00',
-                                            'is_active': True,
-                                            'is_retired': False,
-                                            'is_terminated': False,
-                                            'retirement_date': None,
-                                            'status': 'Active',
-                                            'termination_date': None},
+                        'active_positions': [
+                            {
+                              'is_primary': True,
+                              'job_class': None,
+                              'job_profile': {'description': None,
+                                              'job_code': None},
+                              'job_title': 'Student Assistant (NE H)',
+                              'location': None,
+                              'org_unit_code': '',
+                              'pos_type': None,
+                              'end_date': None,
+                              'start_date': '2021-11-12 '
+                                            '00:00:00-08:00',
+                              'supervisor_eid': None,
+                              'supervisory_org': {
+                                'budget_code': '',
+                                'org_code': 'CAS',
+                                'org_name': 'Chemistry: JM student'}
+                            }
+                        ],
+                        'employee_status': {
+                            'hire_date': '2021-11-12 00:00:00-08:00',
+                            'is_active': True,
+                            'is_retired': False,
+                            'is_terminated': False,
+                            'retirement_date': None,
+                            'status': 'Active',
+                            'termination_date': None
+                        },
+                        'primary_job_title': None,
                         'primary_manager_id': None,
                         'worker_wid': '1b68136df25201c0710e3ddad462fa1d'
                     }

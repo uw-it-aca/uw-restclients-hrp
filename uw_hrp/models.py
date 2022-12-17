@@ -28,6 +28,31 @@ def parse_date(date_str):
     return None
 
 
+def get_emp_program_job_class(job_classification_summaries):
+    # process JobClassificationSummaries, extract employment program job code
+    if job_classification_summaries and len(job_classification_summaries) > 0:
+        for summary in job_classification_summaries:
+            jcg = summary.get("JobClassificationGroup")
+            if (jcg and jcg.get("Name") == "Employment Program" and
+                    summary.get("JobClassification")):
+                emp_program_name = summary["JobClassification"].get("Name")
+                if " - " in emp_program_name:
+                    name_data = emp_program_name.split(" - ", 1)
+                    emp_program_name = name_data[1]
+
+                if " (" in emp_program_name:
+                    return emp_program_name.split(" (", 1)[0]
+                return emp_program_name.strip()
+
+
+def get_org_code_name(organization_name):
+    if organization_name and ": " in organization_name:
+        (org_code, org_name) = organization_name.split(": ", 1)
+        if " (" in org_name:
+            org_name = org_name.split(" (", 1)[0]
+        return org_code.strip(), org_name.strip()
+
+
 class EmploymentStatus(models.Model):
     status = models.CharField(max_length=32)
     is_active = models.BooleanField(default=False)
@@ -90,13 +115,13 @@ class JobProfile(models.Model):
 
 
 class SupervisoryOrganization(models.Model):
-    # budget_code = models.CharField(max_length=16, null=True, default=None)
-    org_code = models.CharField(max_length=16, null=True, default=None)
-    org_name = models.CharField(max_length=128, null=True, default=None)
+    budget_code = models.CharField(max_length=16, default="")
+    org_code = models.CharField(max_length=16, default="")
+    org_name = models.CharField(max_length=128, default="")
 
     def to_json(self):
         return {
-                # 'budget_code': self.budget_code,
+                'budget_code': self.budget_code,
                 'org_code': self.org_code,
                 'org_name': self.org_name
                 }
@@ -106,13 +131,7 @@ class SupervisoryOrganization(models.Model):
         if data is None:
             return super(SupervisoryOrganization, self).__init__(*args,
                                                                  **kwargs)
-        name_data = data.get("Name").strip()
-        if ": " in name_data:
-            name_data = name_data.split(": ", 1)
-            self.org_code = name_data[0].strip()
-            if " (" in name_data[1]:
-                org_name = name_data[1].strip().split(" (", 1)
-                self.org_name = org_name[0]
+        self.org_code, self.org_name = get_org_code_name(data.get("Name"))
 
     def __str__(self):
         return json.dumps(self.to_json())
@@ -121,32 +140,29 @@ class SupervisoryOrganization(models.Model):
 class EmploymentDetails(models.Model):
     start_date = models.DateTimeField(null=True, default=None)
     end_date = models.DateTimeField(null=True, default=None)
-    job_class = models.CharField(max_length=96, null=True, default=None)
-    fte_percent = models.FloatField(null=True, blank=True, default=None)
+    job_class = models.CharField(max_length=128, null=True, default=None)
+    job_title = models.CharField(max_length=128, null=True, default=None)
     is_primary = models.BooleanField(default=False)
     location = models.CharField(max_length=96, null=True, default=None)
-    org_unit_code = models.CharField(max_length=8,
-                                     null=True, default=None)
+    org_unit_code = models.CharField(max_length=10, default="")
     pos_type = models.CharField(max_length=64, null=True, default=None)
     supervisor_eid = models.CharField(max_length=16,
                                       null=True, default=None)
-    title = models.CharField(max_length=128, null=True, default=None)
 
     def is_active_position(self):
         return is_future_end_date(self.end_date)
 
     def to_json(self):
         data = {
-                'start_date': date_to_str(self.start_date),
                 'end_date': date_to_str(self.end_date),
-                'job_class': self.job_class,
-                'fte_percent': self.fte_percent,
                 'is_primary': self.is_primary,
+                'job_title': self.title,
+                'job_class': self.job_class,
                 'location': self.location,
                 'org_unit_code': self.org_unit_code,
                 'pos_type': self.pos_type,
+                'start_date': date_to_str(self.start_date),
                 'supervisor_eid': self.supervisor_eid,
-                'title': self.title,
                 'job_profile': None,
                 'supervisory_org': None
                 }
@@ -166,40 +182,14 @@ class EmploymentDetails(models.Model):
         if data is None:
             return super(EmploymentDetails, self).__init__(*args, **kwargs)
 
-        self.job_profile = JobProfile(
-            data=data.get("JobProfile"))
-
-        self.supervisory_org = SupervisoryOrganization(
-            data=data.get("SupervisoryOrganization"))
-
-        if data.get("JobClassificationSummaries"):
-            for jc_data in data["JobClassificationSummaries"]:
-                if jc_data.get("JobClassification"):
-                    jobc = jc_data["JobClassification"].get("Name")
-                    if " - " in jobc:
-                        name_data = jobc.split(" - ", 1)
-                        if len(name_data[1]) > 0:
-                            self.job_class = name_data[1].strip()
-                            if " (" in self.job_class:
-                                self.job_class = self.job_class.split(
-                                    " (", 1)[0]
-
         self.title = data.get("BusinessTitle")
-        self.fte_percent = float(data.get("FTEPercent"))
-        self.is_primary = data.get("PrimaryPosition")
-        self.start_date = parse_date(data.get("StartDate"))
-        self.end_date = parse_date(data.get("PositionVacateDate"))
+        self.job_profile = JobProfile(data=data.get("JobProfile"))
+
+        self.job_class = get_emp_program_job_class(
+            data.get("JobClassificationSummaries"))
+
         if data.get("Location") is not None:
             self.location = data["Location"].get("Name")
-
-        org_details = data.get("OrganizationDetails")
-        if org_details is not None and len(org_details) > 0:
-            org = org_details[0].get("Organization")
-            if org is not None:
-                self.org_unit_code = org.get("Name")
-
-        if data.get("PositionWorkerType") is not None:
-            self.pos_type = data["PositionWorkerType"].get("Name")
 
         managers = data.get("Managers")
         if managers is not None and len(managers) > 0:
@@ -208,10 +198,28 @@ class EmploymentDetails(models.Model):
                 if id_data.get("Type") == "Employee_ID":
                     self.supervisor_eid = id_data.get("Value")
 
+        """
+        org_details = data.get("OrganizationDetails")
+        if org_details and len(org_details) > 0:
+            org = org_details[0].get("Organization")
+            if org is not None:
+                self.org_unit_code = org.get("Name")
+        """
+
+        if data.get("PositionWorkerType") is not None:
+            self.pos_type = data["PositionWorkerType"].get("Name")
+        
+        self.is_primary = data.get("PrimaryPosition")
+        self.end_date = parse_date(data.get("PositionVacateDate"))
+        self.start_date = parse_date(data.get("StartDate"))
+        self.supervisory_org = SupervisoryOrganization(
+            data=data.get("SupervisoryOrganization"))
 
 class WorkerDetails(models.Model):
     worker_wid = models.CharField(max_length=32)
     is_active = models.BooleanField(default=False)
+    primary_job_title = models.CharField(
+        max_length=128, null=True, default=None)
     primary_manager_id = models.CharField(
         max_length=16, null=True, default=None)
 
@@ -221,6 +229,7 @@ class WorkerDetails(models.Model):
             'employee_status': (
                 self.employee_status.to_json() if self.employee_status
                 else None),
+            'primary_job_title': self.primary_job_title,
             'primary_manager_id': self.primary_manager_id,
             'active_positions': []
         }
@@ -252,11 +261,12 @@ class WorkerDetails(models.Model):
         if not (self.employee_status and self.employee_status.is_active):
             return
 
-        emp_details = data.get("EmploymentDetails")
-        if emp_details is not None and len(emp_details) > 0:
-            for emp_detail in emp_details:
+        active_positions = data.get("EmploymentDetails")
+        if active_positions is not None and len(active_positions) > 0:
+            for emp_detail in active_positions:
                 position = EmploymentDetails(data=emp_detail)
                 if position and position.is_primary:
+                    self.primary_job_title = position.job_title
                     self.primary_manager_id = position.supervisor_eid
                     self.primary_position = position
                 else:
