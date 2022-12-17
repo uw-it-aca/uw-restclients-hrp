@@ -12,10 +12,6 @@ def get_now():
     return datetime.now(timezone.utc)
 
 
-def is_future_end_date(end_date):
-    return end_date is None or end_date > get_now()
-
-
 def date_to_str(d_obj):
     if d_obj is not None:
         return str(d_obj)
@@ -148,9 +144,6 @@ class EmploymentDetails(models.Model):
     pos_type = models.CharField(max_length=64, null=True, default=None)
     supervisor_eid = models.CharField(max_length=16,
                                       null=True, default=None)
-
-    def is_active_position(self):
-        return is_future_end_date(self.end_date)
 
     def to_json(self):
         data = {
@@ -309,16 +302,14 @@ class Person(models.Model):
             if id.get("Type") == "StudentID":
                 self.student_id = id.get("Value")
 
-        if "WorkerDetails" in data:
-            wk_detail_list = data["WorkerDetails"]
-            for wk_detail in wk_detail_list:
-                if wk_detail.get("ActiveAppointment") is False:
-                    continue
+        for wk_detail in data.get("WorkerDetails"):
+            if wk_detail.get("ActiveAppointment") is False:
+                continue
 
-                worker_obj = WorkerDetails(data=wk_detail)
-                if (worker_obj and worker_obj.employee_status and
-                        worker_obj.employee_status.is_active):
-                    self.is_active = True
-                    self.worker_details.append(worker_obj)
-                if worker_obj.primary_manager_id is not None:
-                    self.primary_manager_id = worker_obj.primary_manager_id
+            worker_obj = WorkerDetails(data=wk_detail)
+            if (worker_obj and worker_obj.employee_status and
+                    worker_obj.employee_status.is_active):
+                self.is_active = True
+                self.worker_details.append(worker_obj)
+            if worker_obj.primary_manager_id is not None:
+                self.primary_manager_id = worker_obj.primary_manager_id

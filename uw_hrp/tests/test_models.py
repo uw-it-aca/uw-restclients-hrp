@@ -2,11 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from unittest import TestCase
-from datetime import datetime, timedelta, timezone
 from uw_hrp.models import (
     EmploymentStatus, JobProfile, SupervisoryOrganization,
     EmploymentDetails, WorkerDetails, Person, parse_date,
-    get_emp_program_job_class)
+    get_emp_program_job_class, get_org_code_name)
 from uw_hrp.util import fdao_hrp_override
 
 
@@ -29,11 +28,11 @@ class ModelsTest(TestCase):
         }]
         self.assertEqual(get_emp_program_job_class(data), 'Stipend')
 
-    def get_org_code_name(self):
+    def test_get_org_code_name(self):
         data = "CAS: Chemistry: Theberge JM Student ()"
         code, name = get_org_code_name(data)
         self.assertEqual(code, "CAS")
-        self.assertEqual(name, "Chemistry: Theberge JM Student ()")
+        self.assertEqual(name, "Chemistry: Theberge JM Student")
 
     def test_employment_status(self):
         emp_status0 = EmploymentStatus(status="Active", is_active=True)
