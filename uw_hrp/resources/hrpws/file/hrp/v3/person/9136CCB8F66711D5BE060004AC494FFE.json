@@ -1,0 +1,1298 @@
+{
+  "Name": "James Student",
+  "EmployeeID": "123456789",
+  "RegID": "9136CCB8F66711D5BE060004AC494FFE",
+  "IDs": [
+    {
+      "Type": "RegID",
+      "Value": "9136CCB8F66711D5BE060004AC494FFE"
+    },
+    {
+      "Type": "EmployeeID",
+      "Value": "123456789"
+    },
+    {
+      "Type": "NetID",
+      "Value": "javerage"
+    },
+    {
+      "Type": "StudentID",
+      "Value": "2069354"
+    },
+    {
+      "Type": "PriorEmployeeID",
+      "Value": "T000063295"
+    }
+  ],
+  "Href": "/hrp/v3/person/9136CCB8F66711D5BE060004AC494FFE.json",
+  "RepositoryTimeStamp": "2022-11-29T10:59:11.706-08:00",
+  "FirstName": "James",
+  "LastName": "Student",
+  "PreferredName": {
+    "FirstName": "James",
+    "LastName": "Student",
+    "MiddleName": null
+  },
+  "WorkerDetails": [
+    {
+      "Name": "Student, James",
+      "WID": "1b68136df25201c0710e3ddad462fa1d",
+      "IDs": [
+        {
+          "Type": "WID",
+          "Value": ""
+        },
+        {
+          "Type": "Employee_ID",
+          "Value": "123456789"
+        }
+      ],
+      "WorkerType": "Employee",
+      "HuskyCardOverride": null,
+      "EmploymentStatus": {
+        "HireDate": "2021-11-12T00:00:00-08:00",
+        "OriginalHireDate": "2021-11-12T00:00:00-08:00",
+        "ExpectedFixedTermEndDate": "2023-06-15T00:00:00-07:00",
+        "FirstDayOfWork": "2021-11-12T00:00:00-08:00",
+        "ActiveStatusDate": "2021-11-12T00:00:00-08:00",
+        "Active": true,
+        "EmployeeStatus": "Active",
+        "Terminated": false,
+        "TerminationDate": null,
+        "TerminationInvoluntary": null,
+        "TerminationReason": null,
+        "Retired": false,
+        "RetirementDate": null,
+        "RetirementApplicationDate": null,
+        "DisplayLeave": false,
+        "LeaveStatusDetails": []
+      },
+      "EmploymentDetails": [
+        {
+          "Position": {
+            "Name": "PN-0212169 Student Assistant (NE H) - Student, James",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Position_ID",
+                "Value": "PN-0212169"
+              }
+            ],
+            "Href": "/hrp/v3/position/.json"
+          },
+          "PositionRestriction": null,
+          "PrimaryPosition": true,
+          "BusinessTitle": "Student Assistant (NE H)",
+          "PositionTitle": "Student Assistant (NE H)",
+          "EffectiveDate": "2022-11-12T00:00:00-08:00",
+          "StartDate": "2021-11-12T00:00:00-08:00",
+          "PositionVacateDate": null,
+          "ExpectedFixedTermEndDate": null,
+          "PositionWorkerType": {
+            "Name": "Temporary (Fixed Term)",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Employee_Type_ID",
+                "Value": "Temporary"
+              }
+            ]
+          },
+          "FTEPercent": 0.0,
+          "PayRateType": {
+            "Name": "Hourly",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Pay_Rate_Type_ID",
+                "Value": "Hourly"
+              }
+            ]
+          },
+          "WorkShift": {
+            "Name": "First Shift (United States of America)",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Work_Shift_ID",
+                "Value": "First Shift"
+              }
+            ]
+          },
+          "TotalPayAnnualizedAmount": 35921.6,
+          "TimeType": {
+            "Name": "Part time",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Position_Time_Type_ID",
+                "Value": "Part_time"
+              }
+            ]
+          },
+          "CompensationStep": null,
+          "TotalBasePayAmount": 17.27,
+          "TotalBasePayFrequency": {
+            "Name": "Hourly",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Frequency_ID",
+                "Value": "Hourly"
+              }
+            ]
+          },
+          "TotalBasePayAnnualizedAmount": 3.6,
+          "JobProfile": {
+            "Name": "Student Assistant (NE H)",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Job_Profile_ID",
+                "Value": "10875"
+              }
+            ],
+            "Href": "/hrp/v3/jobprofile/.json"
+          },
+          "JobClassificationSummaries": [
+            {
+              "JobClassification": {
+                "Name": "U - Undergraduate Student (Employment Program)",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Classification_Reference_ID",
+                    "Value": "ECS_U"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassification/.json"
+              },
+              "JobClassificationGroup": {
+                "Name": "Employment Program",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Classification_Group_ID",
+                    "Value": "ECS"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassificationgroup/.json"
+              }
+            },
+            {
+              "JobClassification": {
+                "Name": "0180 - Hourly, Overtime, Premiums and Payouts (Financial Account Codes (Object-Codes))",
+                "WID": "d957207a306801ea738f97e46d5cbd24",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": "d957207a306801ea738f97e46d5cbd24"
+                  },
+                  {
+                    "Type": "Job_Classification_Reference_ID",
+                    "Value": "OBJ_0180"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassification/d957207a306801ea738f97e46d5cbd24.json"
+              },
+              "JobClassificationGroup": {
+                "Name": "Financial Account Codes (Object-Codes)",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Classification_Group_ID",
+                    "Value": "OBJ"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassificationgroup/.json"
+              }
+            }
+          ],
+          "Location": {
+            "Name": "Seattle Campus",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Location_ID",
+                "Value": "Seattle Campus"
+              }
+            ],
+            "Href": "/financial/v2/location/.json"
+          },
+          "OrganizationDetails": [
+            {
+              "Type": {
+                "Name": "Cost Center",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "COST_CENTER"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "060418 CHEMISTRY",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "060418"
+                  },
+                  {
+                    "Type": "Cost_Center_Reference_ID",
+                    "Value": "060418"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "Service Period",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "Service_Period"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "12",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "Service_Period_12.00"
+                  },
+                  {
+                    "Type": "Custom_Organization_Reference_ID",
+                    "Value": "Service_Period_12.00"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "Campus Mailbox",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "Campus_Mailbox"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "351700",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "351700"
+                  },
+                  {
+                    "Type": "Custom_Organization_Reference_ID",
+                    "Value": "351700"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "Supervisory",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "SUPERVISORY"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "CAS: Chemistry: Theberge JM Student (Theberge, Ashleigh B)",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "CAS_000896_JM_Student"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "FERPA",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "Protected_ID"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "Students Protected by FERPA",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "STUDENTS_FERPA"
+                  },
+                  {
+                    "Type": "Custom_Organization_Reference_ID",
+                    "Value": "STUDENTS_FERPA"
+                  }
+                ]
+              }
+            }
+          ],
+          "JobScheduledWeeklyHours": 0.0,
+          "JobDefaultWeeklyHours": 40.0,
+          "JobFamilySummaries": [
+            {
+              "JobFamily": {
+                "Name": "01 - Student Employees - Students",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Family_ID",
+                    "Value": "Students"
+                  }
+                ],
+                "Href": "/hrp/v3/jobfamily/.json"
+              },
+              "JobFamilyGroup": {
+                "Name": "01 - Student Employees",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Family_ID",
+                    "Value": "01 - Student Employees"
+                  }
+                ],
+                "Href": "/hrp/v3/jobfamilygroup/.json"
+              }
+            }
+          ],
+          "JobCategory": {
+            "Name": "Hourly and Other",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Job_Category_ID",
+                "Value": "Hourly and Other"
+              }
+            ],
+            "Href": "/hrp/v3/jobcategory/.json"
+          },
+          "CompensationMostRecentChangeDate": "2022-11-12T00:00:00-08:00",
+          "Managers": [
+            {
+              "Name": "The, Ash",
+              "WID": "",
+              "IDs": [
+                {
+                  "Type": "WID",
+                  "Value": ""
+                },
+                {
+                  "Type": "Employee_ID",
+                  "Value": "100000001"
+                }
+              ],
+              "Href": "/hrp/v3/person/100000001.json"
+            }
+          ],
+          "IsManager": false,
+          "ProbationEndDate": null,
+          "SupervisoryOrganization": {
+            "Name": "CAS: Chemistry: Theberge JM Student ()",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Reference_ID",
+                "Value": "CAS_000896_JM_Student"
+              }
+            ],
+            "Href": "/hrp/v3/supervisoryorganization/.json"
+          },
+          "WorkerCompensationPlanAssignment": {
+            "Href": "/hrp/v3/workercompensationplanassignment/.json"
+          },
+          "WorkerPeriodActivityPayAssignment": {
+            "Href": "/hrp/v3/workerperiodactivitypayassignment/.json"
+          },
+          "WorkerPayrollCostingAllocation": {
+            "Href": "/hrp/v3/workerpayrollcostingallocation/.json"
+          }
+        },
+        {
+          "Position": {
+            "Name": "PN-0244338 Graduate Fellow/Trainee Stipend w/o Benefits - Student, (+)",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Position_ID",
+                "Value": "PN-0244338"
+              }
+            ],
+            "Href": "/hrp/v3/position/.json"
+          },
+          "PositionRestriction": null,
+          "PrimaryPosition": false,
+          "BusinessTitle": "Graduate Fellow/Trainee Stipend w/o Benefits",
+          "PositionTitle": "Graduate Fellow/Trainee Stipend w/o Benefits",
+          "EffectiveDate": "2022-10-16T00:00:00-07:00",
+          "StartDate": "2022-10-16T00:00:00-07:00",
+          "PositionVacateDate": null,
+          "ExpectedFixedTermEndDate": null,
+          "PositionWorkerType": {
+            "Name": "Fixed Term (Fixed Term)",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Employee_Type_ID",
+                "Value": "Fixed_Term"
+              }
+            ]
+          },
+          "FTEPercent": 0.0,
+          "PayRateType": {
+            "Name": "Stipend",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Pay_Rate_Type_ID",
+                "Value": "Stipend"
+              }
+            ]
+          },
+          "WorkShift": {
+            "Name": "First Shift (United States of America)",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Work_Shift_ID",
+                "Value": "First Shift"
+              }
+            ]
+          },
+          "TotalPayAnnualizedAmount": 35921.6,
+          "TimeType": {
+            "Name": "Part time",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Position_Time_Type_ID",
+                "Value": "Part_time"
+              }
+            ]
+          },
+          "CompensationStep": null,
+          "TotalBasePayAmount": 0.0,
+          "TotalBasePayFrequency": null,
+          "TotalBasePayAnnualizedAmount": 0.0,
+          "JobProfile": {
+            "Name": "Graduate Fellow/Trainee Stipend w/o Benefits",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Job_Profile_ID",
+                "Value": "21192"
+              }
+            ],
+            "Href": "/hrp/v3/jobprofile/.json"
+          },
+          "JobClassificationSummaries": [
+            {
+              "JobClassification": {
+                "Name": "S - Stipend (Employment Program)",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Classification_Reference_ID",
+                    "Value": "ECS_S"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassification/.json"
+              },
+              "JobClassificationGroup": {
+                "Name": "Employment Program",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Classification_Group_ID",
+                    "Value": "ECS"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassificationgroup/.json"
+              }
+            },
+            {
+              "JobClassification": {
+                "Name": "0190 - Pre Doc Trainees (Financial Account Codes (Object-Codes))",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Classification_Reference_ID",
+                    "Value": "OBJ_0190"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassification/.json"
+              },
+              "JobClassificationGroup": {
+                "Name": "Financial Account Codes (Object-Codes)",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Job_Classification_Group_ID",
+                    "Value": "OBJ"
+                  }
+                ],
+                "Href": "/hrp/v3/jobclassificationgroup/.json"
+              }
+            }
+          ],
+          "Location": {
+            "Name": "Seattle Campus",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Location_ID",
+                "Value": "Seattle Campus"
+              }
+            ],
+            "Href": "/financial/v2/location/.json"
+          },
+          "OrganizationDetails": [
+            {
+              "Type": {
+                "Name": "Service Period",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "Service_Period"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "12",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "Service_Period_12.00"
+                  },
+                  {
+                    "Type": "Custom_Organization_Reference_ID",
+                    "Value": "Service_Period_12.00"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "Campus Mailbox",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "Campus_Mailbox"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "352600",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "352600"
+                  },
+                  {
+                    "Type": "Custom_Organization_Reference_ID",
+                    "Value": "352600"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "Cost Center",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "COST_CENTER"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "752554 RCR DEVASIA",
+                "WID": "d957207a30680191be62d9a2925c97d2",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": "d957207a30680191be62d9a2925c97d2"
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "752554"
+                  },
+                  {
+                    "Type": "Cost_Center_Reference_ID",
+                    "Value": "752554"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "Supervisory",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "SUPERVISORY"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "ENG: Mechanical Engineering-Devasia Lab JM Student (Devasia, Santosh (Inherited))",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "ENG_000307_JM_Student"
+                  }
+                ]
+              }
+            },
+            {
+              "Type": {
+                "Name": "FERPA",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "Protected_ID"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "Students Protected by FERPA",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "STUDENTS_FERPA"
+                  },
+                  {
+                    "Type": "Custom_Organization_Reference_ID",
+                    "Value": "STUDENTS_FERPA"
+                  }
+                ]
+              }
+            }
+          ],
+          "JobScheduledWeeklyHours": 0.0,
+          "JobDefaultWeeklyHours": 40.0,
+          "JobFamilySummaries": [
+            {
+              "JobFamily": {
+                "Name": "01 - Stipend Family Group - Stipend",
+                "WID": "d957207a30680175d7993a0d6e5ce62e",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": "d957207a30680175d7993a0d6e5ce62e"
+                  },
+                  {
+                    "Type": "Job_Family_ID",
+                    "Value": "Stipend"
+                  }
+                ],
+                "Href": "/hrp/v3/jobfamily/d957207a30680175d7993a0d6e5ce62e.json"
+              },
+              "JobFamilyGroup": {
+                "Name": "01 - Stipend Family Group",
+                "WID": "d957207a30680184a72187e46e5c5032",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": "d957207a30680184a72187e46e5c5032"
+                  },
+                  {
+                    "Type": "Job_Family_ID",
+                    "Value": "01 - Stipend Family Group"
+                  }
+                ],
+                "Href": "/hrp/v3/jobfamilygroup/d957207a30680184a72187e46e5c5032.json"
+              }
+            }
+          ],
+          "JobCategory": {
+            "Name": "Graduate Student Stipends",
+            "WID": "d957207a306801fb261817276e5c502f",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": "d957207a306801fb261817276e5c502f"
+              },
+              {
+                "Type": "Job_Category_ID",
+                "Value": "Graduate Student Stipends"
+              }
+            ],
+            "Href": "/hrp/v3/jobcategory/d957207a306801fb261817276e5c502f.json"
+          },
+          "CompensationMostRecentChangeDate": null,
+          "Managers": [],
+          "IsManager": false,
+          "ProbationEndDate": null,
+          "SupervisoryOrganization": {
+            "Name": "ENG: Mechanical Engineering-Devasia Lab JM Student ()",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Reference_ID",
+                "Value": "ENG_000307_JM_Student"
+              }
+            ],
+            "Href": "/hrp/v3/supervisoryorganization/.json"
+          },
+          "WorkerCompensationPlanAssignment": {
+            "Href": "/hrp/v3/workercompensationplanassignment/.json"
+          },
+          "WorkerPeriodActivityPayAssignment": {
+            "Href": "/hrp/v3/workerperiodactivitypayassignment/.json"
+          },
+          "WorkerPayrollCostingAllocation": {
+            "Href": "/hrp/v3/workerpayrollcostingallocation/.json"
+          }
+        }
+      ],
+      "OrganizationDetails": [
+        {
+          "Type": {
+            "Name": "Cost Center",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Type_ID",
+                "Value": "COST_CENTER"
+              }
+            ]
+          },
+          "Organization": {
+            "Name": "060418 CHEMISTRY",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Reference_ID",
+                "Value": "060418"
+              },
+              {
+                "Type": "Cost_Center_Reference_ID",
+                "Value": "060418"
+              }
+            ]
+          }
+        },
+        {
+          "Type": {
+            "Name": "Service Period",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Type_ID",
+                "Value": "Service_Period"
+              }
+            ]
+          },
+          "Organization": {
+            "Name": "12",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Reference_ID",
+                "Value": "Service_Period_12.00"
+              },
+              {
+                "Type": "Custom_Organization_Reference_ID",
+                "Value": "Service_Period_12.00"
+              }
+            ]
+          }
+        },
+        {
+          "Type": {
+            "Name": "Campus Mailbox",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Type_ID",
+                "Value": "Campus_Mailbox"
+              }
+            ]
+          },
+          "Organization": {
+            "Name": "351700",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Reference_ID",
+                "Value": "351700"
+              },
+              {
+                "Type": "Custom_Organization_Reference_ID",
+                "Value": "351700"
+              }
+            ]
+          }
+        },
+        {
+          "Type": {
+            "Name": "Supervisory",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Type_ID",
+                "Value": "SUPERVISORY"
+              }
+            ]
+          },
+          "Organization": {
+            "Name": "CAS: Chemistry: Theberge JM Student (Theberge, Ashleigh B)",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Reference_ID",
+                "Value": "CAS_000896_JM_Student"
+              }
+            ]
+          }
+        },
+        {
+          "Type": {
+            "Name": "FERPA",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Type_ID",
+                "Value": "Protected_ID"
+              }
+            ]
+          },
+          "Organization": {
+            "Name": "Students Protected by FERPA",
+            "WID": "",
+            "IDs": [
+              {
+                "Type": "WID",
+                "Value": ""
+              },
+              {
+                "Type": "Organization_Reference_ID",
+                "Value": "STUDENTS_FERPA"
+              },
+              {
+                "Type": "Custom_Organization_Reference_ID",
+                "Value": "STUDENTS_FERPA"
+              }
+            ]
+          }
+        }
+      ],
+      "PersonalData": {
+        "LegalName": null,
+        "DateOfBirth": null,
+        "USCitizenshipStatuses": [],
+        "IsHispanicOrLatino": null,
+        "FederalReportingEthnicityCode": null,
+        "Gender": null,
+        "DisabilityStatusDetails": [],
+        "SelfIdentificationOfDisability": {
+          "SelfIdentificationOfDisabilityStatus": null,
+          "SelfIdentificationID": null
+        },
+        "MaritalStatus": null,
+        "Ethnicities": [],
+        "MilitaryStatuses": [],
+        "Contact": {
+          "Addresses": [
+            {
+              "Address": {
+                "Name": "ADDRESS_REFERENCE-6-49",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Address_ID",
+                    "Value": "ADDRESS_REFERENCE-6-49"
+                  }
+                ]
+              },
+              "Lines": [
+                {
+                  "Name": "Address Line 1",
+                  "Type": "ADDRESS_LINE_1",
+                  "Value": "Seattle Main Campus"
+                }
+              ],
+              "Country": {
+                "Name": "United States of America",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "ISO_3166-1_Alpha-2_Code",
+                    "Value": "US"
+                  },
+                  {
+                    "Type": "ISO_3166-1_Alpha-3_Code",
+                    "Value": "USA"
+                  },
+                  {
+                    "Type": "ISO_3166-1_Numeric-3_Code",
+                    "Value": "840"
+                  }
+                ]
+              },
+              "Region": {
+                "Name": "Washington",
+                "WID": "",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": ""
+                  },
+                  {
+                    "Type": "Country_Region_ID",
+                    "Value": "USA-WA"
+                  },
+                  {
+                    "Type": "ISO_3166-2_Code",
+                    "Value": "WA"
+                  }
+                ]
+              },
+              "Municipality": "Seattle",
+              "PostalCode": "98195",
+              "FormattedAddress": "Seattle Main Campus&#xa;Seattle, WA 98195&#xa;United States of America",
+              "EffectiveDate": "1900-01-01T00:00:00-08:00",
+              "Usages": [
+                {
+                  "Types": [
+                    {
+                      "Primary": true,
+                      "CommunicationType": {
+                        "Name": "Work",
+                        "WID": "",
+                        "IDs": [
+                          {
+                            "Type": "WID",
+                            "Value": ""
+                          },
+                          {
+                            "Type": "Communication_Usage_Type_ID",
+                            "Value": "WORK"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "UsesFor": [],
+                  "UsesForTenanted": [],
+                  "Public": true
+                }
+              ],
+              "SubRegions": []
+            }
+          ],
+          "Emails": [
+            {
+              "Email": {
+                "Name": "EMAIL_REFERENCE-3-2126130",
+                "WID": "52242b25e5f20109a4eb43ae14870002",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": "52242b25e5f20109a4eb43ae14870002"
+                  },
+                  {
+                    "Type": "Email_ID",
+                    "Value": "EMAIL_REFERENCE-3-2126130"
+                  }
+                ]
+              },
+              "EmailAddress": "javerage@uw.edu",
+              "Usages": [
+                {
+                  "Types": [
+                    {
+                      "Primary": true,
+                      "CommunicationType": {
+                        "Name": "Work",
+                        "WID": "",
+                        "IDs": [
+                          {
+                            "Type": "WID",
+                            "Value": ""
+                          },
+                          {
+                            "Type": "Communication_Usage_Type_ID",
+                            "Value": "WORK"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "UsesFor": [],
+                  "UsesForTenanted": [],
+                  "Public": true
+                }
+              ]
+            }
+          ],
+          "Phones": [],
+          "CampusMailbox": "351700"
+        },
+        "CustomIDs": []
+      },
+      "ActiveAppointment": false,
+      "CurrentFaculty": false,
+      "PostdocAnniversaryDate": null,
+      "TeleworkParticipation": null,
+      "FutureRecord": false
+    }
+  ]
+}
