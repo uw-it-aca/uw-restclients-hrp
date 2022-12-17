@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 re_netid = re.compile(r'^[a-z][a-z0-9\-\_\.]{,127}$', re.I)
 re_regid = re.compile(r'^[A-F0-9]{32}$', re.I)
 re_employee_id = re.compile(r'^\d{9}$')
-URL_PREFIX = "/hrp/v3/person/"
+URL_PREFIX = "/hrp/v3/person"
 SUFFIX = "future_worker=true"
 
 
@@ -56,19 +56,14 @@ def person_search(**kwargs):
     """
     Returns a list of Person objects
     Parameters can be:
-      worker_wid: string
-      legal_last_name_contains: string
-      legal_last_name_starts_with: string
-      preferred_first_name_contains: string
-      preferred_last_name_contains: string
-      current_faculty: true|false
-      active_appointment: true|false
-      cost_center: string
-      supervisory_organization: string
-      future_worker: string
-      location: string
-      changed_since: string
-      page_start: string (default: 1)
+        active_appointment: true|false
+        changed_since_date: string
+        cost_center: string
+        current_faculty: true|false
+        future_worker: string
+        location: string
+        supervisory_organization: string
+        worker_wid: string
     """
     url = "{0}.json?{1}&page_size=200".format(URL_PREFIX, urlencode(kwargs))
     persons = []

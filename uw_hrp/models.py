@@ -279,7 +279,7 @@ class Person(models.Model):
     employee_id = models.CharField(max_length=16)
     student_id = models.CharField(
         max_length=16, null=True, default=None)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)  # has active position
     primary_manager_id = models.CharField(
         max_length=16, null=True, default=None)
 
