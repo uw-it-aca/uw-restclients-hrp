@@ -84,6 +84,6 @@ class PersonTest(TestCase):
                           get_person_by_regid, "000")
 
     def test_person_search(self):
-        pass
-        # persons = person_search(changed_since_date="2022-12-12")
-        # self.assertEqual(len(persons), 0)
+        persons = person_search(changed_since_date="2022-12-12")
+        self.assertEqual(len(persons), 1)
+        self.assertFalse(persons[0].is_active)

@@ -1,15 +1,9 @@
 # Copyright 2022 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-from datetime import datetime, timezone
 from dateutil.parser import parse
 import json
 from restclients_core import models
-
-
-def get_now():
-    # return time-zone-aware datetime
-    return datetime.now(timezone.utc)
 
 
 def date_to_str(d_obj):
