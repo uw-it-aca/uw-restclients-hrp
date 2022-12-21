@@ -46,6 +46,7 @@ class PersonTest(TestCase):
         self.assertEqual(
             position.primary_position.to_json(),
             {
+                'budget_code': '681925 WORKDAY DEFAULT DEPTBG',
                 'end_date': None,
                 'is_primary': True,
                 'job_class': 'Academic Personnel',
@@ -55,14 +56,12 @@ class PersonTest(TestCase):
                 },
                 'job_title': 'Clinical Associate Professor',
                 'location': 'Seattle Campus',
+                'org_code': 'SOM',
+                'org_name': 'Family Medicine: King Pierce JM Academic',
                 'org_unit_code': '',
                 'pos_type': 'Unpaid Academic',
                 'start_date': '2012-07-01 00:00:00-07:00',
-                'supervisor_eid': '845007271',
-                'supervisory_org': {
-                    'budget_code': '',
-                    'org_code': 'SOM',
-                    'org_name': 'Family Medicine: King Pierce JM Academic'}
+                'supervisor_eid': '845007271'
             })
 
         person = get_person_by_netid("faculty", include_future=True)
@@ -79,6 +78,30 @@ class PersonTest(TestCase):
     def test_get_person_by_regid(self):
         person = get_person_by_regid("9136CCB8F66711D5BE060004AC494FFE")
         self.assertTrue(person.netid, 'javerage')
+        self.assertTrue(person.is_active)
+        self.assertEqual(person.primary_manager_id, "100000001")
+        self.assertEqual(len(person.worker_details), 1)
+        position = person.worker_details[0]
+        self.assertEqual(len(position.other_active_positions), 1)
+        self.maxDiff = None
+        self.assertEqual(
+            position.other_active_positions[0].to_json(),
+            {'budget_code': '141614 UNIVERSITY PRESS',
+             'end_date': None,
+             'is_primary': False,
+             'job_class': 'Undergraduate Student',
+             'job_profile': {
+                'description': 'Student Assistant - Grad (NE H)',
+                'job_code': '10889'},
+             'job_title': 'UW Press Marketing & Sales Student Associate',
+             'location': 'Seattle, Non-Campus',
+             'org_code': 'LIB',
+             'org_name': 'UW Press: Marketing & Sales JM Student',
+             'org_unit_code': '',
+             'pos_type': 'Temporary (Fixed Term)',
+             'start_date': '2022-07-27 00:00:00-07:00',
+             'supervisor_eid': None}
+        )
 
         self.assertRaises(InvalidRegID,
                           get_person_by_regid, "000")

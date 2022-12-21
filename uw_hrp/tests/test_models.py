@@ -3,7 +3,7 @@
 
 from unittest import TestCase
 from uw_hrp.models import (
-    EmploymentStatus, JobProfile, SupervisoryOrganization,
+    EmploymentStatus, JobProfile,
     EmploymentDetails, WorkerDetails, Person, parse_date,
     get_emp_program_job_class, get_org_code_name)
 from uw_hrp.util import fdao_hrp_override
@@ -110,26 +110,6 @@ class ModelsTest(TestCase):
         )
         self.assertIsNotNone(str(job_prof))
 
-    def test_supervisory_organization(self):
-        super_org = SupervisoryOrganization(
-            org_code="HSA",
-            org_name="EHS: Occl Health - Acc Prevention")
-        self.assertIsNotNone(super_org)
-        super_org = SupervisoryOrganization(
-            data={
-                "Name": "SOM: Family Medicine: King Academic (... ())",
-            }
-        )
-        self.assertEqual(
-            super_org.to_json(),
-            {
-                'budget_code': '',
-                'org_code': 'SOM',
-                'org_name': 'Family Medicine: King Academic'
-            }
-        )
-        self.assertIsNotNone(str(super_org))
-
     def test_employment_details(self):
         emp_details = EmploymentDetails()
         self.assertIsNotNone(emp_details)
@@ -171,6 +151,26 @@ class ModelsTest(TestCase):
                                 ],
                     }
                 ],
+                "OrganizationDetails": [
+                    {
+                        "Type": {
+                            "Name": "Cost Center"
+                        },
+                        "Organization": {
+                            "Name": "141614 UNIVERSITY PRESS",
+                            "IDs": [
+                                {
+                                    "Type": "Organization_Reference_ID",
+                                    "Value": "141614"
+                                },
+                                {
+                                    "Type": "Cost_Center_Reference_ID",
+                                    "Value": "141614"
+                                }
+                            ]
+                        }
+                    },
+                ],
                 "SupervisoryOrganization": {
                     "Name": "SOM: Family Medicine (... (Inherited))",
                 }
@@ -180,6 +180,7 @@ class ModelsTest(TestCase):
         self.assertEqual(
             emp_details.to_json(),
             {
+                'budget_code': '141614 UNIVERSITY PRESS',
                 'end_date': None,
                 'is_primary': True,
                 'job_class': 'Academic Personnel',
@@ -189,15 +190,12 @@ class ModelsTest(TestCase):
                     'job_code': None
                 },
                 'location': 'Seattle Campus',
+                'org_code': 'SOM',
+                'org_name': 'Family Medicine',
                 'org_unit_code': '',
                 'pos_type': 'Unpaid Academic',
                 'start_date': '2012-07-01 00:00:00-07:00',
-                'supervisor_eid': '123456789',
-                'supervisory_org': {
-                    'budget_code': '',
-                    'org_code': 'SOM',
-                    'org_name': 'Family Medicine'
-                }
+                'supervisor_eid': '123456789'
             }
         )
         self.assertIsNotNone(str(emp_details))
@@ -336,22 +334,20 @@ class ModelsTest(TestCase):
                     {
                         'active_positions': [
                             {
-                              'is_primary': True,
-                              'job_class': None,
-                              'job_profile': {'description': None,
-                                              'job_code': None},
-                              'job_title': 'Student Assistant (NE H)',
-                              'location': None,
-                              'org_unit_code': '',
-                              'pos_type': None,
-                              'end_date': None,
-                              'start_date': '2021-11-12 '
-                                            '00:00:00-08:00',
-                              'supervisor_eid': None,
-                              'supervisory_org': {
                                 'budget_code': '',
+                                'is_primary': True,
+                                'job_class': None,
+                                'job_profile': {'description': None,
+                                                'job_code': None},
+                                'job_title': 'Student Assistant (NE H)',
+                                'location': None,
                                 'org_code': 'CAS',
-                                'org_name': 'Chemistry: JM student'}
+                                'org_name': 'Chemistry: JM student',
+                                'org_unit_code': '',
+                                'pos_type': None,
+                                'end_date': None,
+                                'start_date': '2021-11-12 00:00:00-08:00',
+                                'supervisor_eid': None
                             }
                         ],
                         'employee_status': {

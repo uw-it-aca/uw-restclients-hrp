@@ -104,36 +104,16 @@ class JobProfile(models.Model):
         return json.dumps(self.to_json())
 
 
-class SupervisoryOrganization(models.Model):
-    budget_code = models.CharField(max_length=16, default="")
-    org_code = models.CharField(max_length=16, default="")
-    org_name = models.CharField(max_length=128, default="")
-
-    def to_json(self):
-        return {
-                'budget_code': self.budget_code,
-                'org_code': self.org_code,
-                'org_name': self.org_name
-                }
-
-    def __init__(self, *args, **kwargs):
-        data = kwargs.get("data")
-        if data is None:
-            return super(SupervisoryOrganization, self).__init__(*args,
-                                                                 **kwargs)
-        self.org_code, self.org_name = get_org_code_name(data.get("Name"))
-
-    def __str__(self):
-        return json.dumps(self.to_json())
-
-
 class EmploymentDetails(models.Model):
+    budget_code = models.CharField(max_length=16, default="")
     start_date = models.DateTimeField(null=True, default=None)
     end_date = models.DateTimeField(null=True, default=None)
     job_class = models.CharField(max_length=128, null=True, default=None)
     job_title = models.CharField(max_length=128, null=True, default=None)
     is_primary = models.BooleanField(default=False)
     location = models.CharField(max_length=96, null=True, default=None)
+    org_code = models.CharField(max_length=16, default="")
+    org_name = models.CharField(max_length=128, default="")
     org_unit_code = models.CharField(max_length=10, default="")
     pos_type = models.CharField(max_length=64, null=True, default=None)
     supervisor_eid = models.CharField(max_length=16,
@@ -141,22 +121,22 @@ class EmploymentDetails(models.Model):
 
     def to_json(self):
         data = {
+                'budget_code': self.budget_code,
                 'end_date': date_to_str(self.end_date),
                 'is_primary': self.is_primary,
                 'job_title': self.title,
                 'job_class': self.job_class,
                 'location': self.location,
+                'org_code': self.org_code,
+                'org_name': self.org_name,
                 'org_unit_code': self.org_unit_code,
                 'pos_type': self.pos_type,
                 'start_date': date_to_str(self.start_date),
                 'supervisor_eid': self.supervisor_eid,
                 'job_profile': None,
-                'supervisory_org': None
                 }
         if self.job_profile is not None:
             data['job_profile'] = self.job_profile.to_json()
-        if self.supervisory_org is not None:
-            data['supervisory_org'] = self.supervisory_org.to_json()
         return data
 
     def __str__(self):
@@ -185,14 +165,26 @@ class EmploymentDetails(models.Model):
                 if id_data.get("Type") == "Employee_ID":
                     self.supervisor_eid = id_data.get("Value")
 
+        if (data.get("OrganizationDetails") is not None and
+                len(data["OrganizationDetails"])):
+            for org_det in data["OrganizationDetails"]:
+                if (org_det.get("Organization") and
+                        org_det["Organization"].get("Name") and
+                        org_det.get("Type") and
+                        org_det["Type"].get("Name") == "Cost Center"):
+                    self.budget_code = org_det["Organization"]["Name"]
+
         if data.get("PositionWorkerType") is not None:
             self.pos_type = data["PositionWorkerType"].get("Name")
 
         self.is_primary = data.get("PrimaryPosition")
         self.end_date = parse_date(data.get("PositionVacateDate"))
         self.start_date = parse_date(data.get("StartDate"))
-        self.supervisory_org = SupervisoryOrganization(
-            data=data.get("SupervisoryOrganization"))
+
+        if (data.get("SupervisoryOrganization") and
+                data["SupervisoryOrganization"].get("Name")):
+            self.org_code, self.org_name = get_org_code_name(
+                data["SupervisoryOrganization"]["Name"])
 
 
 class WorkerDetails(models.Model):
@@ -297,9 +289,6 @@ class Person(models.Model):
                 self.student_id = id.get("Value")
 
         for wk_detail in data.get("WorkerDetails"):
-            if wk_detail.get("ActiveAppointment") is False:
-                continue
-
             worker_obj = WorkerDetails(data=wk_detail)
             if (worker_obj and worker_obj.employee_status and
                     worker_obj.employee_status.is_active):
