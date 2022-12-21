@@ -72,7 +72,8 @@ def person_search(**kwargs):
         if "Persons" in data:
             for person_record in data.get("Persons"):
                 persons.append(Person(data=person_record))
-        if "Next" in data and len(data["Next"].get("Href")) > 0:
+        if (data.get("Next") and data["Next"].get("Href") and
+                len(data["Next"]["Href"]) > 0):
             url = data["Next"]["Href"]
         else:
             break

@@ -26,7 +26,7 @@
     "FutureWorker": null
   },
   "Next": {
-    "Href": "/hrp/v3/person.json?name=&page_start=2&page_size=1&worker_wid=&last_name=&first_name=&legal_last_name=&legal_first_name=&preferred_last_name=&preferred_first_name=&position=&retired=&terminated=&current_faculty=&active_appointment=&supervisory_organization=&cost_center=&custom_organization_type=&custom_organization=&location=&future_worker=",
+    "Href": null,
     "ResourceName": null,
     "PageStart": "2",
     "PageSize": "1",
