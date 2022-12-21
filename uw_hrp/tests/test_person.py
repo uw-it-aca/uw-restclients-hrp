@@ -81,6 +81,11 @@ class PersonTest(TestCase):
         self.assertTrue(person.is_active)
         self.assertEqual(person.primary_manager_id, "100000001")
         self.assertEqual(len(person.worker_details), 1)
+        self.assertIsNotNone(person.to_json())
+        json_worker_details = person.to_json()['worker_details']
+        self.assertEqual(len(json_worker_details), 1)
+        self.assertEqual(
+            len(json_worker_details[0]['active_positions']), 2)
         position = person.worker_details[0]
         self.assertEqual(len(position.other_active_positions), 1)
         self.maxDiff = None
