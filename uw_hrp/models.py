@@ -189,7 +189,6 @@ class EmploymentDetails(models.Model):
 
 class WorkerDetails(models.Model):
     worker_wid = models.CharField(max_length=32)
-    is_active = models.BooleanField(default=False)
     primary_job_title = models.CharField(
         max_length=128, null=True, default=None)
     primary_manager_id = models.CharField(
