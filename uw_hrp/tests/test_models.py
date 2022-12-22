@@ -29,12 +29,13 @@ class ModelsTest(TestCase):
             },
             {
                 "JobClassification": {
-                    "Name": "0180 - Hourly, Overtime, Premiums and Payouts (Financial Account Codes (Object-Codes))"
+                    "Name": "0180 - Hourly, Overt, Prem (Fina (Object-Codes))"
                 },
                 "JobClassificationGroup": {
                     "Name": "Financial Account Codes (Object-Codes)"
                 }
-            }]
+            }
+        ]
         self.assertEqual(get_emp_program_job_class(data), 'Stipend')
 
     def test_get_org_code_name(self):
