@@ -16,20 +16,30 @@ class ModelsTest(TestCase):
         self.assertIsNotNone(parse_date("2017-09-16T07:00:00.000Z"))
 
     def test_get_emp_program_job_class(self):
-        data = [{
-            "JobClassification": {
-                "Name": "S - Stipend (Employment Program)",
-                "WID": ""
+        data = [
+            {
+                "JobClassification": {
+                    "Name": "S - Stipend (Employment Program)",
+                    "WID": ""
+                },
+                "JobClassificationGroup": {
+                    "Name": "Employment Program",
+                    "WID": ""
+                }
             },
-            "JobClassificationGroup": {
-                "Name": "Employment Program",
-                "WID": ""
+            {
+                "JobClassification": {
+                    "Name": "0180 - Hourly, Overt, Prem (Fina (Object-Codes))"
+                },
+                "JobClassificationGroup": {
+                    "Name": "Financial Account Codes (Object-Codes)"
+                }
             }
-        }]
+        ]
         self.assertEqual(get_emp_program_job_class(data), 'Stipend')
 
     def test_get_org_code_name(self):
-        data = "CAS: Chemistry: Theberge JM Student ()"
+        data = "CAS: Chemistry: Theberge JM Student (...())"
         code, name = get_org_code_name(data)
         self.assertEqual(code, "CAS")
         self.assertEqual(name, "Chemistry: Theberge JM Student")

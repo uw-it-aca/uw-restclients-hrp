@@ -27,11 +27,9 @@ def get_emp_program_job_class(job_classification_summaries):
                     summary.get("JobClassification")):
                 emp_program_name = summary["JobClassification"].get("Name")
                 if " - " in emp_program_name:
-                    name_data = emp_program_name.split(" - ", 1)
-                    emp_program_name = name_data[1]
-
+                    emp_program_name = emp_program_name.split(" - ", 1)[1]
                 if " (" in emp_program_name:
-                    return emp_program_name.split(" (", 1)[0]
+                    emp_program_name = emp_program_name.split(" (", 1)[0]
                 return emp_program_name.strip()
 
 
@@ -168,9 +166,9 @@ class EmploymentDetails(models.Model):
         if (data.get("OrganizationDetails") is not None and
                 len(data["OrganizationDetails"])):
             for org_det in data["OrganizationDetails"]:
-                if (org_det.get("Organization") and
-                        org_det["Organization"].get("Name") and
-                        org_det.get("Type") and
+                if (org_det.get("Organization") is not None and
+                        org_det["Organization"].get("Name") is not None and
+                        org_det.get("Type") is not None and
                         org_det["Type"].get("Name") == "Cost Center"):
                     self.budget_code = org_det["Organization"]["Name"]
 
@@ -181,8 +179,8 @@ class EmploymentDetails(models.Model):
         self.end_date = parse_date(data.get("PositionVacateDate"))
         self.start_date = parse_date(data.get("StartDate"))
 
-        if (data.get("SupervisoryOrganization") and
-                data["SupervisoryOrganization"].get("Name")):
+        if (data.get("SupervisoryOrganization") is not None and
+                data["SupervisoryOrganization"].get("Name") is not None):
             self.org_code, self.org_name = get_org_code_name(
                 data["SupervisoryOrganization"]["Name"])
 
@@ -232,16 +230,14 @@ class WorkerDetails(models.Model):
         if not (self.employee_status and self.employee_status.is_active):
             return
 
-        active_positions = data.get("EmploymentDetails")
-        if active_positions is not None and len(active_positions) > 0:
-            for emp_detail in active_positions:
-                position = EmploymentDetails(data=emp_detail)
-                if position and position.is_primary:
-                    self.primary_job_title = position.job_title
-                    self.primary_manager_id = position.supervisor_eid
-                    self.primary_position = position
-                else:
-                    self.other_active_positions.append(position)
+        for emp_detail in data.get("EmploymentDetails"):
+            position = EmploymentDetails(data=emp_detail)
+            if position and position.is_primary:
+                self.primary_job_title = position.job_title
+                self.primary_manager_id = position.supervisor_eid
+                self.primary_position = position
+            else:
+                self.other_active_positions.append(position)
 
 
 class Person(models.Model):
