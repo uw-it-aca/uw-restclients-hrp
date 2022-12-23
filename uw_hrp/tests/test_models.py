@@ -359,7 +359,7 @@ class ModelsTest(TestCase):
                             'status': 'Active',
                             'termination_date': None
                         },
-                        'primary_job_title': None,
+                        'primary_job_title': 'Student Assistant (NE H)',
                         'primary_manager_id': None,
                         'worker_wid': '1b68136df25201c0710e3ddad462fa1d'
                     }
