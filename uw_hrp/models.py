@@ -122,7 +122,7 @@ class EmploymentDetails(models.Model):
                 'budget_code': self.budget_code,
                 'end_date': date_to_str(self.end_date),
                 'is_primary': self.is_primary,
-                'job_title': self.title,
+                'job_title': self.job_title,
                 'job_class': self.job_class,
                 'location': self.location,
                 'org_code': self.org_code,
@@ -147,7 +147,7 @@ class EmploymentDetails(models.Model):
         if data is None:
             return super(EmploymentDetails, self).__init__(*args, **kwargs)
 
-        self.title = data.get("BusinessTitle")
+        self.job_title = data.get("BusinessTitle")
         self.job_profile = JobProfile(data=data.get("JobProfile"))
 
         self.job_class = get_emp_program_job_class(

@@ -96,18 +96,23 @@ class ModelsTest(TestCase):
     def test_job_profile(self):
         job_prof = JobProfile(job_code="1", description="A")
         self.assertIsNotNone(job_prof)
-        job_prof = JobProfile(
-            data={
+        self.assertEqual(JobProfile(
+            data={"Name": "Unpaid", "IDs": []}).to_json(),
+            {
+                'job_code': None, 'description': 'Unpaid'
+            }
+        )
+
+        job_prof = JobProfile(data={
                 "Name": "Unpaid Academic",
-                "WID": "d957207a306801fc5c30a8906f5c6b57",
                 "IDs": [
-                    {
-                        "Type": "WID",
-                        "Value": "d957207a306801fc5c30a8906f5c6b57"
-                    },
                     {
                         "Type": "Job_Profile_ID",
                         "Value": "21184"
+                    },
+                    {
+                        "Type": "WID",
+                        "Value": "d957207a306801fc5c30a8906f5c6b57"
                     }
                 ]
             }
@@ -369,7 +374,7 @@ class ModelsTest(TestCase):
                             'status': 'Active',
                             'termination_date': None
                         },
-                        'primary_job_title': None,
+                        'primary_job_title': 'Student Assistant (NE H)',
                         'primary_manager_id': None,
                         'worker_wid': '1b68136df25201c0710e3ddad462fa1d'
                     }
