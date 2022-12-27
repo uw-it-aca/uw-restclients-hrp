@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def get_resource(url):
     response = HRP_DAO().getURL(url, {'Accept': 'application/json'})
     logger.info("{} == {} ==> {}".format(
-        url, response.status, response.data[0:50]))
+        url, response.status, response.data))
     if response.status != 200:
         raise DataFailureException(url, response.status, response.data)
     return response.data
