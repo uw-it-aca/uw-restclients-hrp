@@ -4,24 +4,23 @@
 from unittest import TestCase
 from restclients_core.exceptions import (
     DataFailureException, InvalidEmployeeID, InvalidRegID, InvalidNetID)
-from uw_hrp.person import (
-    get_person_by_netid, get_person_by_employee_id, get_person_by_regid,
-    person_search)
+from uw_hrp import HRP
 from uw_hrp.util import fdao_hrp_override
 
 
 @fdao_hrp_override
-class PersonTest(TestCase):
+class HrpTest(TestCase):
 
     def test_get_person_by_netid(self):
+        hrp = HRP()
         self.assertRaises(DataFailureException,
-                          get_person_by_netid,
+                          hrp.get_person_by_netid,
                           "None")
         self.assertRaises(InvalidNetID,
-                          get_person_by_netid,
+                          hrp.get_person_by_netid,
                           "")
 
-        person = get_person_by_netid("faculty")
+        person = hrp.get_person_by_netid("faculty")
         self.assertIsNotNone(person)
         self.assertEqual(person.regid, "10000000000000000000000000000005")
         self.assertEqual(person.employee_id, "000000005")
@@ -64,19 +63,26 @@ class PersonTest(TestCase):
                 'supervisor_eid': '845007271'
             })
 
-        person = get_person_by_netid("faculty", include_future=True)
+        person = hrp.get_person_by_netid("faculty", include_future=True)
         self.assertIsNotNone(person)
 
     def test_get_person_by_employee_id(self):
-        person = get_person_by_employee_id("000000005")
+        hrp = HRP()
+        person = hrp.get_person_by_employee_id("000000005")
         self.assertTrue(person.netid, 'faculty')
 
         self.assertRaises(InvalidEmployeeID,
-                          get_person_by_employee_id,
+                          hrp.get_person_by_employee_id,
                           "")
 
     def test_get_person_by_regid(self):
-        person = get_person_by_regid("9136CCB8F66711D5BE060004AC494FFE")
+        hrp = HRP()
+        #person = hrp.get_person_by_netid("javerage")
+        #self.maxDiff = None
+        #self.assertEqual(
+        #    person.to_json(), {})
+
+        person = hrp.get_person_by_regid("9136CCB8F66711D5BE060004AC494FFE")
         self.assertTrue(person.netid, 'javerage')
         self.assertTrue(person.is_active)
         self.assertEqual(person.primary_manager_id, "100000001")
@@ -109,9 +115,10 @@ class PersonTest(TestCase):
         )
 
         self.assertRaises(InvalidRegID,
-                          get_person_by_regid, "000")
+                          hrp.get_person_by_regid, "000")
 
     def test_person_search(self):
-        persons = person_search(changed_since_date="2022-12-12")
+        hrp = HRP()
+        persons = hrp.person_search(changed_since_date="2022-12-12")
         self.assertEqual(len(persons), 1)
         self.assertFalse(persons[0].is_active)
