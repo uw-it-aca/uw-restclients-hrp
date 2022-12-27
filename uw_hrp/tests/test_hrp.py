@@ -77,9 +77,9 @@ class HrpTest(TestCase):
 
     def test_get_person_by_regid(self):
         hrp = HRP()
-        #person = hrp.get_person_by_netid("javerage")
-        #self.maxDiff = None
-        #self.assertEqual(
+        # person = hrp.get_person_by_netid("javerage")
+        # self.maxDiff = None
+        # self.assertEqual(
         #    person.to_json(), {})
 
         person = hrp.get_person_by_regid("9136CCB8F66711D5BE060004AC494FFE")
