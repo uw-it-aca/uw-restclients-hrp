@@ -35,8 +35,9 @@ class HRP(object):
         if response.status != 200:
             raise DataFailureException(
                 url, response.status, response.data)
-        logger.debug("{0} ==data==> {1}".format(url, response.data))
-        return response.data
+        data = convert_bytes_str(response.data)
+        logger.debug("{0} ==data==> {1}".format(url, data))
+        return data
 
     def get_person_by_employee_id(self, employee_id, include_future=False):
         if not valid_employee_id(employee_id):
@@ -104,3 +105,7 @@ def valid_uwregid(regid):
 def valid_employee_id(employee_id):
     return (employee_id is not None and
             re_employee_id.match(str(employee_id)) is not None)
+
+
+def convert_bytes_str(data):
+    return data.decode('utf-8') if type(data) is bytes else data
