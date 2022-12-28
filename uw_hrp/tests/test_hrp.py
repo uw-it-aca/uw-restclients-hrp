@@ -15,6 +15,7 @@ class HrpTest(TestCase):
         self.assertEqual(type(b'bytes'), bytes)
         self.assertEqual(type('bytes'), str)
         self.assertEqual(convert_bytes_str(b'bytes'), "bytes")
+        self.assertEqual(convert_bytes_str('bytes'), "bytes")
 
     def test_get_person_by_netid(self):
         hrp = HRP()
