@@ -18,10 +18,6 @@ class HrpTest(TestCase):
 
     def test_get_person_by_netid(self):
         hrp = HRP()
-        person = hrp.get_person_by_netid("javerage")
-        self.maxDiff = None
-        self.assertEqual(person.to_json(), {})
-
         self.assertRaises(DataFailureException,
                           hrp.get_person_by_netid,
                           "None")
