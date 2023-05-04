@@ -35,11 +35,14 @@ def get_emp_program_job_class(job_classification_summaries):
 
 
 def get_org_code_name(organization_name):
-    if organization_name and ": " in organization_name:
+    org_code = ""
+    org_name = organization_name
+    if ": " in organization_name:
         (org_code, org_name) = organization_name.split(": ", 1)
-        if " (" in org_name:
-            org_name = org_name.split(" (", 1)[0]
-        return org_code.strip(), org_name.strip()
+
+    if " (" in org_name:
+        org_name = org_name.split(" (", 1)[0]
+    return org_code.strip(), org_name.strip()
 
 
 class EmploymentStatus(models.Model):
@@ -180,7 +183,7 @@ class EmploymentDetails(models.Model):
         self.end_date = parse_date(data.get("PositionVacateDate"))
         self.start_date = parse_date(data.get("StartDate"))
 
-        if (data.get("SupervisoryOrganization") is not None and
+        if (data.get("SupervisoryOrganization") and
                 data["SupervisoryOrganization"].get("Name") is not None):
             self.org_code, self.org_name = get_org_code_name(
                 data["SupervisoryOrganization"]["Name"])

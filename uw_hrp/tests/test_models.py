@@ -45,6 +45,11 @@ class ModelsTest(TestCase):
         self.assertEqual(code, "CAS")
         self.assertEqual(name, "Chemistry: Theberge JM Student")
 
+        # exceptional case
+        code, name = get_org_code_name("School of Law (Lawson, Tamara F)")
+        self.assertEqual(code, "")
+        self.assertEqual(name, "School of Law")
+
     def test_employment_status(self):
         emp_status0 = EmploymentStatus(status="Active", is_active=True)
         self.assertIsNotNone(emp_status0)
