@@ -405,6 +405,40 @@
                   }
                 ]
               }
+            },
+            {
+              "Type": {
+                "Name": "HR Org",
+                "WID": "87c9ff9a8b111001721d949632ca0000",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": "87c9ff9a8b111001721d949632ca0000"
+                  },
+                  {
+                    "Type": "Organization_Type_ID",
+                    "Value": "HR_ORG"
+                  }
+                ]
+              },
+              "Organization": {
+                "Name": "Family Medicine",
+                "WID": "990283877b661001ba2b7654f95d0000",
+                "IDs": [
+                  {
+                    "Type": "WID",
+                    "Value": "990283877b661001ba2b7654f95d0000"
+                  },
+                  {
+                    "Type": "Organization_Reference_ID",
+                    "Value": "HROrg000733"
+                  },
+                  {
+                    "Type": "Custom_Organization_Reference_ID",
+                    "Value": "HROrg000733"
+                  }
+                ]
+              }
             }
           ],
           "JobScheduledWeeklyHours": 0.0,
