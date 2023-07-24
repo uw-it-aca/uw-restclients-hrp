@@ -175,22 +175,12 @@ class ModelsTest(TestCase):
                 "OrganizationDetails": [
                     {
                         "Type": {
-                            "Name": "Cost Center"
+                            "Name": "HR Org"
                         },
                         "Organization": {
-                            "Name": "141614 UNIVERSITY PRESS",
-                            "IDs": [
-                                {
-                                    "Type": "Organization_Reference_ID",
-                                    "Value": "141614"
-                                },
-                                {
-                                    "Type": "Cost_Center_Reference_ID",
-                                    "Value": "141614"
-                                }
-                            ]
+                            "Name": "University Libraries and UW Press (Dept)"
                         }
-                    },
+                    }
                 ],
                 "SupervisoryOrganization": {
                     "Name": "SOM: Family Medicine (... (Inherited))",
@@ -201,7 +191,7 @@ class ModelsTest(TestCase):
         self.assertEqual(
             emp_details.to_json(),
             {
-                'budget_code': '141614 UNIVERSITY PRESS',
+                'hr_org': 'University Libraries and UW Press (Dept)',
                 'end_date': None,
                 'is_primary': True,
                 'job_class': 'Academic Personnel',
@@ -355,7 +345,7 @@ class ModelsTest(TestCase):
                     {
                         'active_positions': [
                             {
-                                'budget_code': '',
+                                'hr_org': '',
                                 'is_primary': True,
                                 'job_class': None,
                                 'job_profile': {'description': None,

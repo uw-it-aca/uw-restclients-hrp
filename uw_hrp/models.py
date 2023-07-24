@@ -107,9 +107,9 @@ class JobProfile(models.Model):
 
 
 class EmploymentDetails(models.Model):
-    budget_code = models.CharField(max_length=16, default="")
     start_date = models.DateTimeField(null=True, default=None)
     end_date = models.DateTimeField(null=True, default=None)
+    hr_org = models.CharField(max_length=96, default="")
     job_class = models.CharField(max_length=128, null=True, default=None)
     job_title = models.CharField(max_length=128, null=True, default=None)
     is_primary = models.BooleanField(default=False)
@@ -123,7 +123,7 @@ class EmploymentDetails(models.Model):
 
     def to_json(self):
         data = {
-                'budget_code': self.budget_code,
+                'hr_org': self.hr_org,
                 'end_date': date_to_str(self.end_date),
                 'is_primary': self.is_primary,
                 'job_title': self.job_title,
@@ -173,8 +173,8 @@ class EmploymentDetails(models.Model):
                 if (org_det.get("Organization") is not None and
                         org_det["Organization"].get("Name") is not None and
                         org_det.get("Type") is not None and
-                        org_det["Type"].get("Name") == "Cost Center"):
-                    self.budget_code = org_det["Organization"]["Name"]
+                        org_det["Type"].get("Name") == "HR Org"):
+                    self.hr_org = org_det["Organization"]["Name"]
 
         if data.get("PositionWorkerType") is not None:
             self.pos_type = data["PositionWorkerType"].get("Name")
