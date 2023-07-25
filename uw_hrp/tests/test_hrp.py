@@ -52,7 +52,7 @@ class HrpTest(TestCase):
         self.assertEqual(
             position.primary_position.to_json(),
             {
-                'budget_code': '681925 WORKDAY DEFAULT DEPTBG',
+                'hr_org': 'Family Medicine',
                 'end_date': None,
                 'is_primary': True,
                 'job_class': 'Academic Personnel',
@@ -99,7 +99,7 @@ class HrpTest(TestCase):
         self.maxDiff = None
         self.assertEqual(
             position.other_active_positions[0].to_json(),
-            {'budget_code': '141614 UNIVERSITY PRESS',
+            {'hr_org': '',
              'end_date': None,
              'is_primary': False,
              'job_class': 'Undergraduate Student',
