@@ -20,7 +20,7 @@ setup(
     name='UW-RestClients-HRP',
     version=VERSION,
     packages=['uw_hrp'],
-    author="UW-IT T&LS",
+    author="UW-IT SETS",
     author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
